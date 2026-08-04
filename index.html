@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oleksandr Kalita - AI Automation Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F5F7;
+    --bg-card: #FFFFFF;
+    --bg-card-soft: #FAFAFB;
+    --border: rgba(0,0,0,0.07);
+    --text-primary: #1D1D1F;
+    --text-secondary: #6E6E73;
+    --text-tertiary: #86868B;
+    --accent-blue: #0A6CFF;
+    --accent-blue-soft: #0A6CFF14;
+    --accent-orange: #FF8A00;
+    --accent-orange-soft: #FF8A0014;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.06);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.10);
+    --radius-lg: 28px;
+    --radius-md: 20px;
+    --radius-sm: 12px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-theme="dark"] {
+    --bg: #000000;
+    --bg-card: #1C1C1E;
+    --bg-card-soft: #17171A;
+    --border: rgba(255,255,255,0.08);
+    --text-primary: #F5F5F7;
+    --text-secondary: #98989D;
+    --text-tertiary: #6E6E73;
+    --accent-blue: #3B9BFF;
+    --accent-blue-soft: #3B9BFF1A;
+    --accent-orange: #FFA733;
+    --accent-orange-soft: #FFA7331A;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.55);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body { max-width: 100%; overflow-x: hidden; }
+  section { scroll-margin-top: 72px; }
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.55;
+    transition: background 0.4s var(--ease), color 0.4s var(--ease);
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce) { *{ animation:none !important; transition:none !important; } }
+  h1,h2,h3 { font-weight: 700; letter-spacing: -0.02em; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  img,svg { display:block; }
+
+  ::selection { background: var(--accent-blue-soft); }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* NAV */
+  header.nav {
+    position: sticky; top: 0; z-index: 100;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1120px; margin:0 auto; }
+  .nav-name { font-weight:700; font-size:15px; letter-spacing:-0.01em; }
+  .nav-links { display:flex; gap:30px; }
+  .nav-links a { font-size:13.5px; color:var(--text-secondary); transition:color .2s var(--ease); }
+  .nav-links a:hover { color:var(--text-primary); }
+  .nav-controls { display:flex; align-items:center; gap:8px; }
+  .lang-switch { display:flex; background:var(--bg-card); border:1px solid var(--border); border-radius:999px; padding:3px; box-shadow:var(--shadow-sm); }
+  .lang-switch button { font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:999px; background:transparent; border:none; color:var(--text-tertiary); cursor:pointer; transition:all .25s var(--ease); }
+  .lang-switch button.active { background:var(--text-primary); color:var(--bg); }
+  .theme-toggle {
+    width:32px; height:32px; border-radius:50%; border:1px solid var(--border);
+    background:var(--bg-card); color:var(--text-secondary); cursor:pointer; font-size:14px;
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm); transition:all .25s var(--ease);
+  }
+  .theme-toggle:hover { transform:scale(1.08); }
+  .burger {
+    display:none; width:32px; height:32px; border-radius:50%; border:1px solid var(--border);
+    background:var(--bg-card); color:var(--text-primary); cursor:pointer; align-items:center; justify-content:center;
+    box-shadow:var(--shadow-sm); font-size:14px;
+  }
+  .mobile-menu {
+    display:none; flex-direction:column; gap:2px; padding:8px 16px 16px;
+    background:var(--bg); border-bottom:1px solid var(--border);
+  }
+  .mobile-menu a { padding:12px 4px; font-size:15px; color:var(--text-primary); border-bottom:1px solid var(--border); }
+  .mobile-menu a:last-child { border-bottom:none; }
+  .mobile-menu.open { display:flex; }
+
+  /* HERO */
+  .hero { position:relative; padding:150px 24px 120px; text-align:center; overflow:hidden; }
+  .blob { position:absolute; border-radius:50%; filter:blur(90px); opacity:.45; z-index:0; animation:float 14s ease-in-out infinite; }
+  .blob1 { width:480px; height:480px; background:radial-gradient(circle, var(--accent-blue), transparent 70%); top:-180px; left:-120px; }
+  .blob2 { width:420px; height:420px; background:radial-gradient(circle, var(--accent-orange), transparent 70%); top:-100px; right:-140px; animation-delay:-6s; }
+  [data-theme="dark"] .blob { opacity:.22; }
+  @keyframes float { 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(30px,40px) scale(1.08);} }
+  .hero-inner { position:relative; z-index:1; max-width:680px; margin:0 auto; }
+  .eyebrow-pill {
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--text-secondary);
+    background:var(--bg-card); border:1px solid var(--border); padding:7px 16px; border-radius:999px; margin-bottom:28px; box-shadow:var(--shadow-sm);
+  }
+  .eyebrow-pill .dot { width:6px; height:6px; border-radius:50%; background:var(--accent-blue); }
+  .hero h1 { font-size:56px; margin-bottom:8px; }
+  .hero .role { font-size:22px; color:var(--text-secondary); font-weight:600; margin-bottom:20px; }
+  .hero .tagline { font-size:18px; color:var(--text-secondary); max-width:540px; margin:0 auto 30px; font-weight:400; }
+  .hero .loc { font-size:13.5px; color:var(--text-tertiary); margin-bottom:38px; }
+  .hero-ctas { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn { padding:14px 28px; border-radius:999px; font-size:15px; font-weight:600; cursor:pointer; transition:all .25s var(--ease); display:inline-block; border:1px solid transparent; }
+  .btn-primary { background:var(--text-primary); color:var(--bg); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .btn-ghost { background:var(--bg-card); color:var(--text-primary); border-color:var(--border); box-shadow:var(--shadow-sm); }
+  .btn-ghost:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+
+  /* SECTIONS */
+  section { padding:100px 0; }
+  .section-head { text-align:center; max-width:600px; margin:0 auto 50px; }
+  .section-eyebrow { font-size:13px; font-weight:700; color:var(--accent-blue); text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px; display:block; }
+  .section-head h2 { font-size:36px; margin-bottom:12px; }
+  .section-head .sub { color:var(--text-secondary); font-size:16px; }
+
+  .card {
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm); transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+  }
+  .card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+
+  /* ABOUT */
+  .about-card { padding:48px; display:flex; gap:36px; align-items:flex-start; }
+  .about-avatar {
+    flex-shrink:0; width:84px; height:84px; border-radius:24px; display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:800; color:#fff; background:linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+  }
+  .about-body p { color:var(--text-secondary); font-size:16px; margin-bottom:16px; }
+  .about-body p:last-child { margin-bottom:0; }
+  .about-body strong { color:var(--text-primary); font-weight:700; }
+
+  @media (max-width: 640px) { .about-card { flex-direction:column; padding:32px 24px; } }
+
+  /* WHY */
+  .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:56px; }
+  .why-card { padding:26px; }
+  .why-num { width:34px; height:34px; border-radius:10px; background:var(--accent-blue-soft); color:var(--accent-blue); font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+  .why-card p { color:var(--text-secondary); font-size:14.5px; }
+
+  .biz-head { text-align:center; margin-bottom:24px; }
+  .biz-head .label { font-size:13px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.05em; }
+  .biz-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .biz-item { padding:20px; }
+  .biz-item strong { display:block; font-size:15px; margin-bottom:6px; }
+  .biz-item p { font-size:13.5px; color:var(--text-secondary); }
+
+  /* STACK */
+  .stack-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .stack-card { padding:26px; }
+  .stack-card h3 { font-size:15.5px; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .stack-card h3 .swatch { width:8px; height:8px; border-radius:50%; background:var(--accent-orange); }
+  .stack-pills { display:flex; flex-wrap:wrap; gap:8px; }
+  .pill { font-size:12.5px; font-weight:500; padding:6px 12px; background:var(--bg-card-soft); border:1px solid var(--border); border-radius:999px; color:var(--text-secondary); }
+
+  /* CASES - bento */
+  .cases-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .case-card { padding:30px; display:flex; flex-direction:column; gap:16px; }
+  .case-card.featured { grid-column:span 2; }
+  .case-tag { display:inline-block; width:fit-content; font-size:11.5px; font-weight:700; color:var(--accent-blue); background:var(--accent-blue-soft); padding:5px 12px; border-radius:999px; text-transform:uppercase; letter-spacing:.03em; }
+  .case-card h3 { font-size:20px; }
+  .case-block .label { font-size:11.5px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  .case-block p { font-size:14.5px; color:var(--text-secondary); }
+  .case-media { margin-top:4px; border:1.5px dashed var(--border); border-radius:var(--radius-sm); padding:18px; text-align:center; font-size:12.5px; color:var(--text-tertiary); font-weight:500; }
+  @media (max-width:760px){ .case-card.featured{ grid-column:span 1; } }
+
+  /* DIPLOMA */
+  .diploma-card { padding:40px 44px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  .diploma-card h3 { font-size:19px; margin-bottom:8px; }
+  .diploma-card p { color:var(--text-secondary); font-size:14.5px; max-width:520px; }
+
+  /* CONTACT */
+  .contact-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .contact-card {
+    padding:28px 20px; text-align:center; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+  }
+  .contact-card .cicon {
+    width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+    transition: transform .35s var(--ease);
+  }
+  .contact-card:hover .cicon { transform: scale(1.1) rotate(-4deg); }
+  .contact-card .cicon svg { width:24px; height:24px; }
+  .contact-card .clabel { font-size:11px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.06em; }
+  .contact-card .cval { font-size:14.5px; font-weight:600; }
+  .contact-card .carrow {
+    position:absolute; top:16px; right:16px; font-size:13px; color:var(--text-tertiary);
+    opacity:0; transform:translate(-4px,4px); transition:all .3s var(--ease);
+  }
+  .contact-card:hover .carrow { opacity:1; transform:translate(0,0); }
+  .contact-card.c-email .cicon { background:#6E6E7318; color:#6E6E73; }
+  .contact-card.c-tg .cicon { background:#0A6CFF18; color:#0A6CFF; }
+  .contact-card.c-li .cicon { background:#0A66C218; color:#0A66C2; }
+  .contact-card.c-up .cicon { background:#14A80018; color:#14A800; }
+  .contact-card.c-email:hover { box-shadow:0 12px 32px #6E6E7322; }
+  .contact-card.c-tg:hover { box-shadow:0 12px 32px #0A6CFF22; }
+  .contact-card.c-li:hover { box-shadow:0 12px 32px #0A66C222; }
+  .contact-card.c-up:hover { box-shadow:0 12px 32px #14A80022; }
+
+  footer { padding:36px 0; text-align:center; font-size:12.5px; color:var(--text-tertiary); }
+
+  @media (max-width: 900px) {
+    .why-grid, .biz-grid, .contact-grid { grid-template-columns:repeat(2,1fr); }
+    .stack-grid, .cases-grid { grid-template-columns:1fr; }
+    .case-card.featured { grid-column:span 1; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display:none; }
+    .burger { display:flex; }
+    .hero { padding:120px 20px 90px; }
+    .hero h1 { font-size:34px; }
+    .hero .role { font-size:17px; }
+    .hero .tagline { font-size:16px; }
+    section { padding:64px 0; }
+    .section-head h2 { font-size:28px; }
+    .why-grid, .biz-grid, .contact-grid { grid-template-columns:1fr; }
+    .about-card { padding:28px 20px; }
+    .case-card, .why-card, .stack-card { padding:22px; }
+    .diploma-card { padding:28px 24px; flex-direction:column; align-items:flex-start; }
+    .diploma-card .btn { width:100%; text-align:center; }
+  }
+  @media (max-width: 380px) {
+    .hero h1 { font-size:28px; }
+    .wrap { padding:0 16px; }
+  }
+  @media print {
+    .nav-controls, .mobile-menu, .hero-ctas, .carrow { display:none !important; }
+    header.nav { position:static; }
+    .reveal { opacity:1 !important; transform:none !important; }
+    .card:hover { transform:none; box-shadow:var(--shadow-sm); }
+    section { padding:40px 0; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-name">Oleksandr Kalita</div>
+    <nav class="nav-links">
+      <a href="#about" data-i18n="nav.about">Про мене</a>
+      <a href="#why" data-i18n="nav.why">Навіщо</a>
+      <a href="#stack" data-i18n="nav.stack">Стек</a>
+      <a href="#cases" data-i18n="nav.cases">Кейси</a>
+      <a href="#contact" data-i18n="nav.contact">Контакти</a>
+    </nav>
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <button data-lang="uk" class="active">UK</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="pl">PL</button>
+      </div>
+      <button class="theme-toggle" id="themeToggle">☀︎</button>
+      <button class="burger" id="burgerBtn">☰</button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#about" data-i18n="nav.about">Про мене</a>
+    <a href="#why" data-i18n="nav.why">Навіщо</a>
+    <a href="#stack" data-i18n="nav.stack">Стек</a>
+    <a href="#cases" data-i18n="nav.cases">Кейси</a>
+    <a href="#contact" data-i18n="nav.contact">Контакти</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="hero-inner">
+    <span class="eyebrow-pill"><span class="dot"></span><span data-i18n="hero.eyebrow">n8n · AI-інтеграції · автоматизація</span></span>
+    <h1>Oleksandr Kalita</h1>
+    <div class="role" data-i18n="hero.role">AI Automation Specialist</div>
+    <p class="tagline" data-i18n="hero.tagline">Автоматизую бізнес-процеси та інтегрую AI, щоб рутинні задачі виконувались без ручного втручання.</p>
+    <div class="loc" data-i18n="hero.loc">Варшава, Польща · Remote</div>
+    <div class="hero-ctas">
+      <a href="#cases" class="btn btn-primary" data-i18n="hero.cta1">Переглянути кейси</a>
+      <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Зв'язатись</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow" data-i18n="about.eyebrow">Хто я</span>
+      <h2 data-i18n="about.title">Про мене</h2>
+    </div>
+    <div class="card about-card reveal">
+      <div class="about-avatar">OK</div>
+      <div class="about-body" id="aboutText"></div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow" data-i18n="why.eyebrow">Цінність</span>
+      <h2 data-i18n="why.title">Навіщо бізнесу автоматизація</h2>
+    </div>
+    <div class="why-grid" id="whyGrid"></div>
+    <div class="biz-head reveal"><span class="label" data-i18n="why.bizLabel">Кому це підходить</span></div>
+    <div class="biz-grid" id="bizGrid"></div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow" data-i18n="stack.eyebrow">Інструменти</span>
+      <h2 data-i18n="stack.title">Навички та стек</h2>
+    </div>
+    <div class="stack-grid" id="stackGrid"></div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow" data-i18n="cases.eyebrow">Проекти</span>
+      <h2 data-i18n="cases.title">Кейси</h2>
+    </div>
+    <div class="cases-grid" id="casesGrid"></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow" data-i18n="contact.eyebrow">Зв'язок</span>
+      <h2 data-i18n="contact.title">Контакти</h2>
+    </div>
+    <div class="contact-grid">
+      <a href="mailto:you@example.com" class="card contact-card c-email reveal">
+        <span class="carrow">↗</span>
+        <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l10 6 10-6"/></svg></div>
+        <div class="clabel">Email</div><div class="cval">you@example.com</div>
+      </a>
+      <a href="https://t.me/yourusername" class="card contact-card c-tg reveal">
+        <span class="carrow">↗</span>
+        <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg></div>
+        <div class="clabel">Telegram</div><div class="cval">@yourusername</div>
+      </a>
+      <a href="https://linkedin.com/in/yourprofile" class="card contact-card c-li reveal">
+        <span class="carrow">↗</span>
+        <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 21v-7a3 3 0 0 1 6 0v7M10 21v-9M16 12v9"/></svg></div>
+        <div class="clabel">LinkedIn</div><div class="cval">in/yourprofile</div>
+      </a>
+      <a href="https://upwork.com/freelancers/yourprofile" class="card contact-card c-up reveal">
+        <span class="carrow">↗</span>
+        <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <div class="clabel">Upwork</div><div class="cval" data-i18n="contact.viewProfile">Профіль</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap" data-i18n="footer.text">© 2026 Oleksandr Kalita</div></footer>
+
+<script>
+const I18N = {
+  uk: {
+    nav: { about: "Про мене", why: "Навіщо", stack: "Стек", cases: "Кейси", contact: "Контакти" },
+    hero: {
+      eyebrow: "n8n · AI-інтеграції · автоматизація", role: "AI Automation Specialist",
+      tagline: "Автоматизую бізнес-процеси та інтегрую AI, щоб рутинні задачі виконувались без ручного втручання. Розробляю лендинги та веб-рішення під потреби клієнта.",
+      loc: "Варшава, Польща · Remote", cta1: "Переглянути кейси", cta2: "Зв'язатись"
+    },
+    about: {
+      eyebrow: "01 - Хто я", title: "Про мене",
+      html: `<p>Я - <strong>AI Automation Specialist</strong> з технічною освітою в галузі комп'ютерної інженерії (спеціальність 122 - Алгоритмічне забезпечення комп'ютерних систем, Чернівецький національний університет, 2026). Спеціалізуюсь на побудові workflow-систем на базі n8n, інтеграції AI-моделей у реальні бізнес-процеси та розробці веб-рішень під конкретні задачі клієнта.</p>
+      <p>Що відрізняє мій підхід - поєднання двох напрямків, які рідко зустрічаються в одній людині: <strong>технічна автоматизація</strong> і практичне розуміння <strong>digital-маркетингу</strong>. Я більше півроку веду рекламні кампанії в Google Ads та Facebook Ads, тому розумію не лише як побудувати систему, а й як бізнес насправді залучає клієнтів і де саме йому болить рутина.</p>
+      <p>Мій підхід до кожного проекту - спочатку зрозуміти реальний процес клієнта, і тільки потім проектувати автоматизацію під ці умови, а не підганяти бізнес під готовий шаблон.</p>
+      <p>Постійно вчуся новому - від нових AI-моделей до нових підходів у no-code розробці - і люблю доводити ідею від концепції до робочого продукту самостійно.</p>`
+    },
+    why: {
+      eyebrow: "02 - Цінність", title: "Навіщо бізнесу автоматизація", bizLabel: "Кому це підходить",
+      cards: [
+        { n:"01", text: "Рутинні задачі з'їдають години часу команди щотижня" },
+        { n:"02", text: "Ручні процеси схильні до помилок - автоматизація прибирає людський фактор" },
+        { n:"03", text: "Обробка замовлень і записів 24/7 - клієнт не йде до конкурента" },
+        { n:"04", text: "CRM без ручного ведення таблиць - база оновлюється сама" },
+        { n:"05", text: "Масштабування без пропорційного росту штату" },
+        { n:"06", text: "Швидший відгук клієнту = вища конверсія і задоволеність" }
+      ],
+      biz: [
+        { t: "E-commerce / малий рітейл", d: "Обробка замовлень, сповіщення клієнтам, синхронізація залишків" },
+        { t: "Сфера послуг (салони, студії)", d: "Запис через бота, який уточнює час і послугу" },
+        { t: "Агенції та консультанти", d: "Кваліфікація вхідного ліда до дзвінка" },
+        { t: "Стартапи / SaaS", d: "Обробка даних, автоматичні звіти, інтеграції" },
+        { t: "Освітні платформи / коучі", d: "Обробка заявок, персоналізовані розсилки" },
+        { t: "Бізнеси без сайту", d: "Швидкий запуск лендингу з формою заявки" }
+      ]
+    },
+    stack: {
+      eyebrow: "03 - Інструменти", title: "Навички та стек",
+      groups: [
+        { cat: "Workflow Automation", items: ["n8n", "Webhook-інтеграції", "Make (Integromat)", "Багатоетапні процеси", "Error handling & retry logic"] },
+        { cat: "AI / LLM Integration", items: ["OpenAI", "Anthropic Claude", "Mistral", "Prompt engineering", "RAG (Retrieval-Augmented Generation)", "AI-агенти"] },
+        { cat: "CRM & Client Management", items: ["Notion/Airtable CRM", "Кастомні рішення", "Автооновлення статусів"] },
+        { cat: "Telegram-боти", items: ["Прийом замовлень", "Запис на послуги", "Кваліфікація лідів"] },
+        { cat: "Data & Knowledge Systems", items: ["Pinecone", "Notion API", "Google Drive API", "JSON / API data mapping"] },
+        { cat: "Web Development", items: ["HTML/CSS/JS", "Node.js / Express", "Лендинги", "Cloudflare Pages"] },
+        { cat: "Технічні практики", items: ["API-автентифікація (OAuth, API keys)", "Debugging & логування воркфлоу", "Git / контроль версій"] },
+        { cat: "Business Process Design", items: ["Аналіз процесів", "Проектування під бізнес", "Технічна документація"] },
+        { cat: "Digital Marketing", items: ["Google Ads", "Facebook Ads", "Аналітика"] }
+      ]
+    },
+    cases: {
+      eyebrow: "04 - Проекти", title: "Кейси",
+      list: [
+        { tag:"File management · AI", title:"AI-система архівування та управління файлами", problem:"Ручний пошук і каталогізація документів займає багато часу", solution:"Node.js/Express + n8n (5 webhook-воркфлоу), Pinecone semantic search, Google Drive, Notion як шар метаданих", result:"Миттєвий семантичний пошук, автоматична каталогізація", media:"Демо-відео + PDF дипломної роботи", featured:true },
+        { tag:"Scheduling · automation", title:"Автоматична генерація графіків роботи", problem:"Ручне складання розкладу з урахуванням побажань кожної людини - довго і схильно до помилок", solution:"Система враховує умови й побажання співробітників та формує оптимальний графік", result:"Менше часу на планування, менше конфліктів", media:"Деталі уточнюються" },
+        { tag:"Finance · Notion", title:"Фінансовий асистент в Notion", problem:"Ручна категоризація витрат", solution:"n8n + AI, автоматична категоризація транзакцій (PLN)", result:"Економія часу, наочна структура", media:"Скріншот воркфлоу" },
+        { tag:"Web · Landing page", title:"Весільний сайт з RSVP", problem:"Збір відповідей гостей вручну", solution:"Cloudflare Pages + n8n webhook + Telegram", result:"Повний цикл: фронтенд + бекенд", media:"Живий сайт" }
+      ]
+    },
+    diploma: { eyebrow:"05 - Кваліфікація", title:"Дипломна робота", text:"Офіційна кваліфікаційна робота з розробки AI-системи архівування файлів.", cta:"Завантажити PDF" },
+    contact: { eyebrow:"06 - Зв'язок", title:"Контакти", viewProfile:"Профіль" },
+    footer: { text: "© 2026 Oleksandr Kalita" }
+  },
+  en: {
+    nav: { about: "About", why: "Why", stack: "Stack", cases: "Cases", contact: "Contact" },
+    hero: {
+      eyebrow: "n8n · AI integration · automation", role: "AI Automation Specialist",
+      tagline: "I automate business processes and integrate AI so routine tasks run without manual work. I also build landing pages and web solutions for client needs.",
+      loc: "Warsaw, Poland · Remote", cta1: "View case studies", cta2: "Get in touch"
+    },
+    about: {
+      eyebrow: "01 - About", title: "About me",
+      html: `<p>I'm an <strong>AI Automation Specialist</strong> with a technical background in Computer Engineering (specialty 122, Chernivtsi National University, 2026). I build workflow systems on n8n, integrate AI models into real business processes, and develop web solutions for specific client needs.</p>
+      <p>What sets my approach apart is a rare combination: <strong>technical automation</strong> and hands-on <strong>digital marketing</strong> experience. I've run Google Ads and Facebook Ads for over six months, so I understand not just how to build a system, but how a business actually acquires customers.</p>
+      <p>My approach on every project: first understand the client's real process, then design automation around those conditions - not force the business into a template.</p>
+      <p>I keep learning continuously and enjoy taking an idea from concept to a working product on my own.</p>`
+    },
+    why: {
+      eyebrow: "02 - Value", title: "Why businesses need automation", bizLabel: "Who this fits",
+      cards: [
+        { n:"01", text: "Routine tasks eat hours of team time every week" },
+        { n:"02", text: "Manual processes are error-prone - automation removes the human factor" },
+        { n:"03", text: "24/7 order and booking handling - customers don't go to a competitor" },
+        { n:"04", text: "CRM without manual spreadsheets - updates itself" },
+        { n:"05", text: "Scaling without proportional headcount growth" },
+        { n:"06", text: "Faster response means higher conversion and satisfaction" }
+      ],
+      biz: [
+        { t: "E-commerce / small retail", d: "Order processing, notifications, stock sync" },
+        { t: "Service businesses", d: "Bookings via a bot that confirms time and service" },
+        { t: "Agencies & consultants", d: "Lead qualification before a call" },
+        { t: "Startups / SaaS", d: "Data processing, automated reports, integrations" },
+        { t: "Education platforms / coaches", d: "Application processing, outreach" },
+        { t: "Businesses without a website", d: "Fast landing page with a lead form" }
+      ]
+    },
+    stack: {
+      eyebrow: "03 - Tools", title: "Skills & stack",
+      groups: [
+        { cat: "Workflow Automation", items: ["n8n", "Webhook integrations", "Make (Integromat)", "Multi-step processes", "Error handling & retry logic"] },
+        { cat: "AI / LLM Integration", items: ["OpenAI", "Anthropic Claude", "Mistral", "Prompt engineering", "RAG (Retrieval-Augmented Generation)", "AI agents"] },
+        { cat: "CRM & Client Management", items: ["Notion/Airtable CRM", "Custom solutions", "Auto status updates"] },
+        { cat: "Telegram bots", items: ["Order intake", "Service bookings", "Lead qualification"] },
+        { cat: "Data & Knowledge Systems", items: ["Pinecone", "Notion API", "Google Drive API", "JSON / API data mapping"] },
+        { cat: "Web Development", items: ["HTML/CSS/JS", "Node.js / Express", "Landing pages", "Cloudflare Pages"] },
+        { cat: "Engineering Practices", items: ["API authentication (OAuth, API keys)", "Debugging & workflow logging", "Git / version control"] },
+        { cat: "Business Process Design", items: ["Process analysis", "Design around real conditions", "Technical documentation"] },
+        { cat: "Digital Marketing", items: ["Google Ads", "Facebook Ads", "Analytics"] }
+      ]
+    },
+    cases: {
+      eyebrow: "04 - Projects", title: "Case studies",
+      list: [
+        { tag:"File management · AI", title:"AI-powered file archiving system", problem:"Manual document search and cataloging takes a lot of time", solution:"Node.js/Express + n8n (5 webhook workflows), Pinecone semantic search, Google Drive, Notion metadata layer", result:"Instant semantic search, automatic cataloging", media:"Demo video + thesis PDF", featured:true },
+        { tag:"Scheduling · automation", title:"Automated work schedule generation", problem:"Manually building schedules accounting for preferences is slow and error-prone", solution:"A system factoring in staff conditions to auto-generate an optimal schedule", result:"Less planning time, fewer conflicts", media:"Details being finalized" },
+        { tag:"Finance · Notion", title:"Financial assistant in Notion", problem:"Manual expense categorization", solution:"n8n + AI, automatic transaction categorization (PLN)", result:"Time saved, clear structure", media:"Workflow screenshot" },
+        { tag:"Web · Landing page", title:"Wedding website with RSVP", problem:"Manually collecting guest responses", solution:"Cloudflare Pages + n8n webhook + Telegram", result:"Full cycle: frontend + backend automation", media:"Live site" }
+      ]
+    },
+    diploma: { eyebrow:"05 - Qualification", title:"Bachelor's thesis", text:"An official thesis on building an AI-powered file archiving system.", cta:"Download PDF" },
+    contact: { eyebrow:"06 - Contact", title:"Contact", viewProfile:"View profile" },
+    footer: { text: "© 2026 Oleksandr Kalita" }
+  },
+  pl: {
+    nav: { about: "O mnie", why: "Dlaczego", stack: "Stack", cases: "Case study", contact: "Kontakt" },
+    hero: {
+      eyebrow: "n8n · integracje AI · automatyzacja", role: "AI Automation Specialist",
+      tagline: "Automatyzuję procesy biznesowe i integruję AI. Tworzę też landing page i rozwiązania webowe pod potrzeby klienta.",
+      loc: "Warszawa, Polska · Zdalnie", cta1: "Zobacz case study", cta2: "Skontaktuj się"
+    },
+    about: {
+      eyebrow: "01 - O mnie", title: "O mnie",
+      html: `<p>Jestem <strong>AI Automation Specialist</strong> z wykształceniem technicznym w zakresie inżynierii komputerowej (specjalność 122, Czerniowiecki Uniwersytet Narodowy, 2026). Buduję systemy workflow oparte na n8n, integruję modele AI z procesami biznesowymi i tworzę rozwiązania webowe pod potrzeby klienta.</p>
+      <p>Moje podejście wyróżnia rzadkie połączenie: <strong>automatyzacja techniczna</strong> i praktyczna znajomość <strong>marketingu cyfrowego</strong>. Od ponad pół roku prowadzę kampanie Google Ads i Facebook Ads.</p>
+      <p>Do każdego projektu podchodzę tak samo: najpierw poznaję realny proces klienta, dopiero potem projektuję automatyzację pod te warunki.</p>
+      <p>Stale się uczę i lubię samodzielnie doprowadzać pomysł od koncepcji do działającego produktu.</p>`
+    },
+    why: {
+      eyebrow: "02 - Wartość", title: "Po co biznesowi automatyzacja", bizLabel: "Dla kogo to działa",
+      cards: [
+        { n:"01", text: "Rutynowe zadania pochłaniają godziny pracy zespołu co tydzień" },
+        { n:"02", text: "Ręczne procesy są podatne na błędy" },
+        { n:"03", text: "Obsługa zamówień i rezerwacji 24/7" },
+        { n:"04", text: "CRM bez ręcznych arkuszy - aktualizuje się sam" },
+        { n:"05", text: "Skalowanie bez proporcjonalnego wzrostu zatrudnienia" },
+        { n:"06", text: "Szybsza odpowiedź = wyższa konwersja" }
+      ],
+      biz: [
+        { t: "E-commerce / mały retail", d: "Obsługa zamówień, powiadomienia, stany magazynowe" },
+        { t: "Usługi (salony, studia)", d: "Rezerwacje przez bota" },
+        { t: "Agencje i konsultanci", d: "Kwalifikacja leada przed rozmową" },
+        { t: "Startupy / SaaS", d: "Przetwarzanie danych, raporty" },
+        { t: "Platformy edukacyjne / coachowie", d: "Obsługa zgłoszeń" },
+        { t: "Biznesy bez strony www", d: "Landing page z formularzem" }
+      ]
+    },
+    stack: {
+      eyebrow: "03 - Narzędzia", title: "Umiejętności i stack",
+      groups: [
+        { cat: "Workflow Automation", items: ["n8n", "Integracje webhook", "Make (Integromat)", "Procesy wieloetapowe", "Error handling & retry logic"] },
+        { cat: "AI / LLM Integration", items: ["OpenAI", "Anthropic Claude", "Mistral", "Prompt engineering", "RAG (Retrieval-Augmented Generation)", "Agenci AI"] },
+        { cat: "CRM & zarządzanie klientem", items: ["CRM Notion/Airtable", "Rozwiązania custom", "Auto-aktualizacja statusów"] },
+        { cat: "Boty Telegram", items: ["Zamówienia", "Rezerwacje usług", "Kwalifikacja leadów"] },
+        { cat: "Data & Knowledge Systems", items: ["Pinecone", "Notion API", "Google Drive API", "JSON / mapowanie danych API"] },
+        { cat: "Web Development", items: ["HTML/CSS/JS", "Node.js / Express", "Landing page", "Cloudflare Pages"] },
+        { cat: "Praktyki inżynierskie", items: ["Autentykacja API (OAuth, klucze API)", "Debugging i logowanie workflow", "Git / kontrola wersji"] },
+        { cat: "Business Process Design", items: ["Analiza procesów", "Projektowanie pod biznes", "Dokumentacja techniczna"] },
+        { cat: "Digital Marketing", items: ["Google Ads", "Facebook Ads", "Analityka"] }
+      ]
+    },
+    cases: {
+      eyebrow: "04 - Projekty", title: "Case study",
+      list: [
+        { tag:"File management · AI", title:"System archiwizacji plików AI", problem:"Ręczne wyszukiwanie i katalogowanie dokumentów zajmuje dużo czasu", solution:"Node.js/Express + n8n, Pinecone, Google Drive, Notion", result:"Natychmiastowe wyszukiwanie, automatyczne katalogowanie", media:"Wideo demo + PDF pracy", featured:true },
+        { tag:"Scheduling", title:"Automatyczne generowanie grafików", problem:"Ręczne układanie grafiku jest wolne i podatne na błędy", solution:"System uwzględniający preferencje pracowników", result:"Mniej czasu na planowanie", media:"Szczegóły w opracowaniu" },
+        { tag:"Finance · Notion", title:"Asystent finansowy w Notion", problem:"Ręczna kategoryzacja wydatków", solution:"n8n + AI, automatyczna kategoryzacja (PLN)", result:"Oszczędność czasu", media:"Zrzut ekranu" },
+        { tag:"Web", title:"Strona ślubna z RSVP", problem:"Ręczne zbieranie odpowiedzi gości", solution:"Cloudflare Pages + n8n + Telegram", result:"Pełny cykl frontend + backend", media:"Działająca strona" }
+      ]
+    },
+    diploma: { eyebrow:"05 - Kwalifikacje", title:"Praca dyplomowa", text:"Oficjalna praca dotycząca systemu archiwizacji plików AI.", cta:"Pobierz PDF" },
+    contact: { eyebrow:"06 - Kontakt", title:"Kontakt", viewProfile:"Zobacz profil" },
+    footer: { text: "© 2026 Oleksandr Kalita" }
+  }
+};
+
+function render(lang) {
+  const d = I18N[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const path = el.getAttribute('data-i18n').split('.');
+    let val = d; path.forEach(p => val = val && val[p]);
+    if (typeof val === 'string') el.textContent = val;
+  });
+  document.getElementById('aboutText').innerHTML = d.about.html;
+
+  document.getElementById('whyGrid').innerHTML = d.why.cards.map(c => `
+    <div class="card why-card reveal"><div class="why-num">${c.n}</div><p>${c.text}</p></div>
+  `).join('');
+
+  document.getElementById('bizGrid').innerHTML = d.why.biz.map(b => `
+    <div class="card biz-item reveal"><strong>${b.t}</strong><p>${b.d}</p></div>
+  `).join('');
+
+  document.getElementById('stackGrid').innerHTML = d.stack.groups.map(g => `
+    <div class="card stack-card reveal"><h3><span class="swatch"></span>${g.cat}</h3>
+      <div class="stack-pills">${g.items.map(i => `<span class="pill">${i}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const L = { problem:{uk:'Проблема',en:'Problem',pl:'Problem'}, solution:{uk:'Рішення',en:'Solution',pl:'Rozwiązanie'}, result:{uk:'Результат',en:'Result',pl:'Rezultat'} };
+  document.getElementById('casesGrid').innerHTML = d.cases.list.map(c => `
+    <div class="card case-card reveal${c.featured ? ' featured' : ''}">
+      <span class="case-tag">${c.tag}</span>
+      <h3>${c.title}</h3>
+      <div class="case-block"><div class="label">${L.problem[lang]}</div><p>${c.problem}</p></div>
+      <div class="case-block"><div class="label">${L.solution[lang]}</div><p>${c.solution}</p></div>
+      <div class="case-block"><div class="label">${L.result[lang]}</div><p>${c.result}</p></div>
+      <div class="case-media">${c.media}</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.lang-switch button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  observeReveals();
+}
+
+document.querySelectorAll('.lang-switch button').forEach(btn => btn.addEventListener('click', () => render(btn.dataset.lang)));
+
+const burgerBtn = document.getElementById('burgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+burgerBtn.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  burgerBtn.textContent = open ? '✕' : '☰';
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  mobileMenu.classList.remove('open');
+  burgerBtn.textContent = '☰';
+}));
+
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  themeToggle.textContent = next === 'light' ? '☀︎' : '☾';
+});
+
+let io;
+function observeReveals() {
+  if (io) io.disconnect();
+  io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
+
+render('uk');
+</script>
+</body>
+</html>
