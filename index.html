@@ -272,9 +272,12 @@
   }
   .lightbox-overlay.open { display:flex; opacity:1; }
   .lightbox-frame { position:relative; max-width:900px; width:100%; text-align:center; }
-  .lightbox-stage { transition:opacity .2s ease, transform .2s ease; touch-action:pan-y; }
+  .lightbox-stage { position:relative; transition:opacity .2s ease, transform .2s ease; touch-action:pan-y; }
   .lightbox-stage.fading { opacity:0; transform:scale(0.97); }
   .lightbox-frame img { max-width:100%; max-height:64vh; border-radius:14px; display:none; margin:0 auto; box-shadow:0 20px 60px rgba(0,0,0,0.5); user-select:none; -webkit-user-drag:none; }
+  .lightbox-tap { position:absolute; top:0; bottom:0; width:34%; z-index:4; cursor:pointer; }
+  .lightbox-tap-left { left:0; }
+  .lightbox-tap-right { right:0; }
   .lightbox-fallback {
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
     background:var(--bg-card); border-radius:14px; padding:60px 30px; color:var(--text-tertiary); font-size:14px;
@@ -307,8 +310,7 @@
   .lightbox-next { right:16px; }
   @media (max-width:640px) {
     .lightbox-close { top:14px; right:14px; width:36px; height:36px; font-size:15px; }
-    .lightbox-nav { width:38px; height:38px; font-size:16px; }
-    .lightbox-prev { left:8px; } .lightbox-next { right:8px; }
+    .lightbox-nav { display:none; }
     .lightbox-frame img { max-height:56vh; }
   }
   .modal-empty { text-align:center; padding:30px 10px; color:var(--text-tertiary); font-size:14.5px; }
@@ -551,6 +553,8 @@
         <span class="lemoji">🖼️</span>
         <span id="lightboxFallbackText"></span>
       </div>
+      <div class="lightbox-tap lightbox-tap-left" id="lightboxTapLeft"></div>
+      <div class="lightbox-tap lightbox-tap-right" id="lightboxTapRight"></div>
     </div>
     <div class="lightbox-caption" id="lightboxCaption"></div>
     <div class="lightbox-dots" id="lightboxDots"></div>
@@ -629,11 +633,11 @@ const I18N = {
           ], docUrl:"https://drive.google.com/drive/folders/1PtvF9MHM-xZnUC6c1LjznoS8pxIg3DpY?usp=sharing" } },
         { tag:"News automation · Telegram", title:"Автоматизований новинний Telegram-канал", problem:"Ручний пошук і публікація IT-новин забирає багато часу, а прямий копіпаст із сайтів дає нечитабельний, засмічений текст", solution:"Мережа n8n-воркфлоу скрапить новинні сайти, чистить текст і публікує готові пости в Telegram з модерацією через Google Sheets", result:"Стабільний потік готових до читання новин без ручної обробки кожного посту",
           extra:{ hasInfo:true, description:"Система працює на кількох n8n-воркфлоу, кожен відповідає за свій етап конвеєра - від пошуку новини до фінальної публікації, з людською модерацією посередині для контролю якості контенту.", steps:[
-            {title:"Моніторинг джерел", text:"Воркфлоу автоматично запускаються за розкладом і перевіряють новинні сайти на появу нових статей"},
-            {title:"Скрапінг та очищення", text:"Текст і зображення статті завантажуються, контент очищується від HTML-сміття та зайвих символів"},
-            {title:"Модерація в Google Sheets", text:"Очищена новина потрапляє в таблицю, де я вручну переглядаю її та ставлю статус Approved або Rejected"},
-            {title:"AI-обробка", text:"Окремий воркфлоу періодично перевіряє таблицю; для схвалених новин AI переписує текст, виділяючи головне, і форматує під MarkdownV2"},
-            {title:"Автопублікація в Telegram", text:"Готовий пост разом із зображенням зі статті автоматично публікується в каналі"}
+            {icon:"scan", title:"Моніторинг джерел", text:"Воркфлоу автоматично запускаються за розкладом і перевіряють новинні сайти на появу нових статей"},
+            {icon:"filter", title:"Скрапінг та очищення", text:"Текст і зображення статті завантажуються, контент очищується від HTML-сміття та зайвих символів"},
+            {icon:"sheet", title:"Модерація в Google Sheets", text:"Очищена новина потрапляє в таблицю, де я вручну переглядаю її та ставлю статус Approved або Rejected"},
+            {icon:"ai", title:"AI-обробка", text:"Окремий воркфлоу періодично перевіряє таблицю; для схвалених новин AI переписує текст, виділяючи головне, і форматує під MarkdownV2"},
+            {icon:"send", title:"Автопублікація в Telegram", text:"Готовий пост разом із зображенням зі статті автоматично публікується в каналі"}
           ], channelUrl:"https://t.me/tech_digest_ua" } },
         { tag:"Web · Landing page", title:"Весільний сайт з RSVP", problem:"Готові конструктори дають шаблонний вигляд, а ручний збір відповідей гостей незручний і губиться в переписках", solution:"Односторінковий сайт-запрошення з індивідуальним дизайном під пару, формою RSVP та автоматичною доставкою відповідей організаторам у Telegram", result:"Готовий до використання сайт без бекенду, гості підтверджують участь за хвилину",
           extra:{ hasInfo:true, description:"Сайт створено під конкретне весілля - дизайн, фотографії та тексти індивідуальні, не шаблонні. RSVP-форма зібрана вручну під побажання пари, а відповіді гостей автоматично долітають організаторам у Telegram без необхідності перевіряти пошту чи таблиці.", steps:[
@@ -710,11 +714,11 @@ const I18N = {
           ], docUrl:"https://drive.google.com/drive/folders/1PtvF9MHM-xZnUC6c1LjznoS8pxIg3DpY?usp=sharing" } },
         { tag:"News automation · Telegram", title:"Automated Telegram news channel", problem:"Manually finding and posting IT news takes a lot of time, and copy-pasting from sites gives messy, unreadable text", solution:"A network of n8n workflows scrapes news sites, cleans the text, and publishes ready posts to Telegram with human moderation via Google Sheets", result:"A steady stream of ready-to-read news without manually processing every post",
           extra:{ hasInfo:true, description:"The system runs on several n8n workflows, each handling its own stage of the pipeline - from finding a news item to final publication, with human moderation in the middle to control content quality.", steps:[
-            {title:"Source monitoring", text:"Workflows run automatically on a schedule and check news sites for new articles"},
-            {title:"Scraping & cleanup", text:"The article's text and image are fetched, and the content is cleaned of HTML clutter and stray characters"},
-            {title:"Moderation in Google Sheets", text:"The cleaned news item lands in a spreadsheet, where I review it manually and set a status of Approved or Rejected"},
-            {title:"AI processing", text:"A separate workflow periodically checks the sheet; for approved items, AI rewrites the text highlighting the key points and formats it for MarkdownV2"},
-            {title:"Auto-publish to Telegram", text:"The finished post, along with the article's image, is automatically published to the channel"}
+            {icon:"scan", title:"Source monitoring", text:"Workflows run automatically on a schedule and check news sites for new articles"},
+            {icon:"filter", title:"Scraping & cleanup", text:"The article's text and image are fetched, and the content is cleaned of HTML clutter and stray characters"},
+            {icon:"sheet", title:"Moderation in Google Sheets", text:"The cleaned news item lands in a spreadsheet, where I review it manually and set a status of Approved or Rejected"},
+            {icon:"ai", title:"AI processing", text:"A separate workflow periodically checks the sheet; for approved items, AI rewrites the text highlighting the key points and formats it for MarkdownV2"},
+            {icon:"send", title:"Auto-publish to Telegram", text:"The finished post, along with the article's image, is automatically published to the channel"}
           ], channelUrl:"https://t.me/tech_digest_ua" } },
         { tag:"Web · Landing page", title:"Wedding website with RSVP", problem:"Off-the-shelf builders look templated, and manually collecting guest responses gets lost in chats", solution:"A single-page invitation site with a custom design for the couple, an RSVP form, and automatic delivery of responses to the organizers on Telegram", result:"A ready-to-use site with no backend, guests confirm attendance in under a minute",
           extra:{ hasInfo:true, description:"Built for a specific wedding - the design, photos and copy are custom, not templated. The RSVP form was built by hand around the couple's requirements, and guest responses land automatically in the organizers' Telegram without checking email or spreadsheets.", steps:[
@@ -791,11 +795,11 @@ const I18N = {
           ], docUrl:"https://drive.google.com/drive/folders/1PtvF9MHM-xZnUC6c1LjznoS8pxIg3DpY?usp=sharing" } },
         { tag:"News automation · Telegram", title:"Zautomatyzowany kanał newsowy na Telegramie", problem:"Ręczne wyszukiwanie i publikowanie newsów IT zajmuje dużo czasu, a kopiowanie ze stron daje nieczytelny, zaśmiecony tekst", solution:"Sieć workflow n8n scrapuje strony z newsami, czyści tekst i publikuje gotowe posty na Telegramie z moderacją przez Google Sheets", result:"Stały strumień gotowych do czytania newsów bez ręcznego przetwarzania każdego posta",
           extra:{ hasInfo:true, description:"System działa na kilku workflow n8n, z których każdy odpowiada za swój etap procesu - od znalezienia newsa po ostateczną publikację, z ludzką moderacją pośrodku dla kontroli jakości treści.", steps:[
-            {title:"Monitorowanie źródeł", text:"Workflow uruchamiają się automatycznie według harmonogramu i sprawdzają strony pod kątem nowych artykułów"},
-            {title:"Scraping i czyszczenie", text:"Tekst i zdjęcie artykułu są pobierane, a treść czyszczona ze śmieci HTML i zbędnych znaków"},
-            {title:"Moderacja w Google Sheets", text:"Oczyszczony news trafia do arkusza, gdzie ręcznie go przeglądam i ustawiam status Approved lub Rejected"},
-            {title:"Przetwarzanie AI", text:"Osobny workflow okresowo sprawdza arkusz; dla zatwierdzonych newsów AI przepisuje tekst, wyróżniając najważniejsze punkty, i formatuje go pod MarkdownV2"},
-            {title:"Automatyczna publikacja na Telegramie", text:"Gotowy post wraz ze zdjęciem z artykułu jest automatycznie publikowany na kanale"}
+            {icon:"scan", title:"Monitorowanie źródeł", text:"Workflow uruchamiają się automatycznie według harmonogramu i sprawdzają strony pod kątem nowych artykułów"},
+            {icon:"filter", title:"Scraping i czyszczenie", text:"Tekst i zdjęcie artykułu są pobierane, a treść czyszczona ze śmieci HTML i zbędnych znaków"},
+            {icon:"sheet", title:"Moderacja w Google Sheets", text:"Oczyszczony news trafia do arkusza, gdzie ręcznie go przeglądam i ustawiam status Approved lub Rejected"},
+            {icon:"ai", title:"Przetwarzanie AI", text:"Osobny workflow okresowo sprawdza arkusz; dla zatwierdzonych newsów AI przepisuje tekst, wyróżniając najważniejsze punkty, i formatuje go pod MarkdownV2"},
+            {icon:"send", title:"Automatyczna publikacja na Telegramie", text:"Gotowy post wraz ze zdjęciem z artykułu jest automatycznie publikowany na kanale"}
           ], channelUrl:"https://t.me/tech_digest_ua" } },
         { tag:"Web", title:"Strona ślubna z RSVP", problem:"Gotowe kreatory dają szablonowy wygląd, a ręczne zbieranie odpowiedzi gości gubi się w wiadomościach", solution:"Jednostronicowa strona z indywidualnym designem dla pary, formularzem RSVP i automatycznym dostarczaniem odpowiedzi organizatorom na Telegramie", result:"Gotowa strona bez backendu, goście potwierdzają udział w minutę",
           extra:{ hasInfo:true, description:"Strona stworzona pod konkretny ślub - design, zdjęcia i teksty są indywidualne, nie szablonowe. Formularz RSVP zbudowany ręcznie pod potrzeby pary, a odpowiedzi gości automatycznie trafiają do organizatorów na Telegramie bez sprawdzania maila czy arkuszy.", steps:[
@@ -1096,6 +1100,8 @@ function closeLightbox() { lightboxOverlay.classList.remove('open'); }
 document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
 document.getElementById('lightboxPrev').addEventListener('click', () => showShot(currentShotIndex - 1));
 document.getElementById('lightboxNext').addEventListener('click', () => showShot(currentShotIndex + 1));
+document.getElementById('lightboxTapLeft').addEventListener('click', () => showShot(currentShotIndex - 1));
+document.getElementById('lightboxTapRight').addEventListener('click', () => showShot(currentShotIndex + 1));
 lightboxOverlay.addEventListener('click', (e) => { if (e.target === lightboxOverlay) closeLightbox(); });
 
 // Swipe support for touch devices
