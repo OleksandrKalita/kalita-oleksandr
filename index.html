@@ -4,6 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oleksandr Kalita - AI Automation Specialist</title>
+<meta name="description" content="AI Automation Specialist based in Warsaw. I build n8n workflows, integrate AI (OpenAI, Claude, Mistral) into real business processes, and develop landing pages and web solutions for clients.">
+
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kalita-oleksandr.pages.dev/">
+<meta property="og:title" content="Oleksandr Kalita - AI Automation Specialist">
+<meta property="og:description" content="I automate business processes and integrate AI so routine tasks run without manual work. n8n workflows, AI integration, landing pages.">
+<meta property="og:image" content="https://kalita-oleksandr.pages.dev/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="uk_UA">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Oleksandr Kalita - AI Automation Specialist">
+<meta name="twitter:description" content="I automate business processes and integrate AI so routine tasks run without manual work.">
+<meta name="twitter:image" content="https://kalita-oleksandr.pages.dev/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -200,15 +220,17 @@
   .modal-overlay.open { display:flex; opacity:1; }
   .modal-box {
     background:var(--bg-card); border-radius:var(--radius-lg); max-width:640px; width:100%;
-    max-height:85vh; overflow-y:auto; box-shadow:var(--shadow-lg); padding:40px;
+    max-height:85vh; overflow:hidden; box-shadow:var(--shadow-lg);
     transform:translateY(16px) scale(0.98); transition:transform .35s var(--ease); position:relative;
+    display:flex; flex-direction:column;
   }
   .modal-overlay.open .modal-box { transform:translateY(0) scale(1); }
+  .modal-inner { overflow-y:auto; padding:40px; }
   .modal-close {
     position:absolute; top:20px; right:20px; width:34px; height:34px; border-radius:50%;
     border:1px solid var(--border); background:var(--bg-card-soft); color:var(--text-secondary);
     cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
-    transition:all .2s var(--ease);
+    transition:all .2s var(--ease); z-index:5;
   }
   .modal-close:hover { background:var(--text-primary); color:var(--bg); }
   .modal-tag { display:inline-block; font-size:11.5px; font-weight:700; color:var(--accent-blue); background:var(--accent-blue-soft); padding:5px 12px; border-radius:999px; text-transform:uppercase; letter-spacing:.03em; margin-bottom:14px; }
@@ -234,42 +256,60 @@
     transition:all .25s var(--ease); width:100%;
   }
   .modal-doc-btn:hover { background:var(--accent-blue); color:#fff; transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .modal-demo-badge {
+    font-size:9.5px; font-weight:700; letter-spacing:.05em; padding:2px 7px; border-radius:5px;
+    background:rgba(255,255,255,0.25); color:inherit;
+  }
   @media (max-width:640px) { .modal-doc-btn { padding:13px 18px; font-size:13.5px; } }
   .modal-shot { cursor:pointer; }
   .modal-shot:hover { border-color:var(--accent-blue); }
 
   /* LIGHTBOX */
   .lightbox-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+    position:fixed; inset:0; background:rgba(0,0,0,0.9); backdrop-filter:blur(8px);
     display:none; align-items:center; justify-content:center; z-index:300; padding:24px;
     opacity:0; transition:opacity .3s var(--ease);
   }
   .lightbox-overlay.open { display:flex; opacity:1; }
   .lightbox-frame { position:relative; max-width:900px; width:100%; text-align:center; }
-  .lightbox-frame img { max-width:100%; max-height:72vh; border-radius:14px; display:none; margin:0 auto; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .lightbox-stage { transition:opacity .2s ease, transform .2s ease; touch-action:pan-y; }
+  .lightbox-stage.fading { opacity:0; transform:scale(0.97); }
+  .lightbox-frame img { max-width:100%; max-height:64vh; border-radius:14px; display:none; margin:0 auto; box-shadow:0 20px 60px rgba(0,0,0,0.5); user-select:none; -webkit-user-drag:none; }
   .lightbox-fallback {
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
     background:var(--bg-card); border-radius:14px; padding:60px 30px; color:var(--text-tertiary); font-size:14px;
   }
   .lightbox-fallback .lemoji { font-size:38px; }
-  .lightbox-caption { color:#fff; font-size:13.5px; margin-top:16px; opacity:0.8; }
+  .lightbox-caption { color:#fff; font-size:13.5px; margin-top:18px; opacity:0.85; }
+  .lightbox-dots { display:flex; gap:7px; justify-content:center; margin-top:14px; }
+  .lightbox-dot {
+    width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.3); border:none;
+    cursor:pointer; padding:0; transition:all .25s var(--ease);
+  }
+  .lightbox-dot.active { background:#fff; width:20px; border-radius:4px; }
+  .lightbox-counter { color:rgba(255,255,255,0.5); font-size:12px; margin-top:8px; }
   .lightbox-close {
-    position:absolute; top:-46px; right:0; width:38px; height:38px; border-radius:50%;
-    border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.1); color:#fff;
+    position:fixed; top:20px; right:20px; width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.25); background:rgba(0,0,0,0.4); color:#fff;
     cursor:pointer; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all .2s var(--ease);
+    z-index:310;
   }
   .lightbox-close:hover { background:#fff; color:#000; }
   .lightbox-nav {
-    position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
-    border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.1); color:#fff;
+    position:fixed; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.25); background:rgba(0,0,0,0.4); color:#fff;
     cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all .2s var(--ease);
+    z-index:310;
   }
   .lightbox-nav:hover { background:#fff; color:#000; }
-  .lightbox-prev { left:-56px; }
-  .lightbox-next { right:-56px; }
-  @media (max-width:760px) {
-    .lightbox-prev { left:4px; } .lightbox-next { right:4px; }
-    .lightbox-close { top:-42px; right:0; }
+  .lightbox-nav:active { transform:translateY(-50%) scale(0.92); }
+  .lightbox-prev { left:16px; }
+  .lightbox-next { right:16px; }
+  @media (max-width:640px) {
+    .lightbox-close { top:14px; right:14px; width:36px; height:36px; font-size:15px; }
+    .lightbox-nav { width:38px; height:38px; font-size:16px; }
+    .lightbox-prev { left:8px; } .lightbox-next { right:8px; }
+    .lightbox-frame img { max-height:56vh; }
   }
   .modal-empty { text-align:center; padding:30px 10px; color:var(--text-tertiary); font-size:14.5px; }
   .modal-empty .memoji { font-size:32px; display:block; margin-bottom:12px; }
@@ -297,10 +337,9 @@
   .modal-shot.modal-anim.play { animation: tileFade .45s var(--ease) forwards; }
   @media (prefers-reduced-motion: reduce) { .modal-anim { opacity:1 !important; transform:none !important; animation:none !important; } }
   @media (max-width:640px) {
-    .modal-box { padding:28px 22px; }
+    .modal-inner { padding:28px 22px; }
     .modal-shots { grid-template-columns:repeat(2,1fr); }
   }
-  @media (max-width:760px){ .case-card.featured{ grid-column:span 1; } }
 
   /* DIPLOMA */
   .diploma-card { padding:40px 44px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
@@ -333,8 +372,16 @@
 
   footer { padding:36px 0; text-align:center; font-size:12.5px; color:var(--text-tertiary); }
 
+  @media (max-width: 1024px) and (min-width: 901px) {
+    .wrap { max-width: 920px; }
+    .hero h1 { font-size:48px; }
+  }
   @media (max-width: 900px) {
     .why-grid, .biz-grid, .contact-grid { grid-template-columns:repeat(2,1fr); }
+    .stack-grid { grid-template-columns:repeat(2,1fr); }
+    .cases-grid { grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width: 700px) {
     .stack-grid, .cases-grid { grid-template-columns:1fr; }
     .case-card.featured { grid-column:span 1; }
   }
@@ -352,6 +399,17 @@
     .case-card, .why-card, .stack-card { padding:22px; }
     .diploma-card { padding:28px 24px; flex-direction:column; align-items:flex-start; }
     .diploma-card .btn { width:100%; text-align:center; }
+    .modal-box { max-height:90vh; }
+    .modal-close { width:36px; height:36px; top:16px; right:16px; font-size:14px; }
+    .theme-toggle, .burger { width:36px; height:36px; }
+    .lang-switch button { padding:7px 11px; }
+  }
+  @media (max-width: 480px) {
+    .modal-inner { padding:22px 16px; }
+    .modal-box { border-radius:22px; }
+    .about-avatar { width:64px; height:64px; border-radius:18px; font-size:20px; }
+    .hero .eyebrow-pill { font-size:11.5px; padding:6px 13px; }
+    .case-card, .why-card, .stack-card { padding:18px; }
   }
   @media (max-width: 380px) {
     .hero h1 { font-size:28px; }
@@ -483,23 +541,29 @@
 <footer><div class="wrap" data-i18n="footer.text">© 2026 Oleksandr Kalita</div></footer>
 
 <div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
   <div class="lightbox-frame">
-    <button class="lightbox-close" id="lightboxClose">✕</button>
-    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
-    <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
-    <img id="lightboxImg" src="" alt="">
-    <div class="lightbox-fallback" id="lightboxFallback" style="display:none;">
-      <span class="lemoji">🖼️</span>
-      <span id="lightboxFallbackText"></span>
+    <div class="lightbox-stage" id="lightboxStage">
+      <img id="lightboxImg" src="" alt="">
+      <div class="lightbox-fallback" id="lightboxFallback" style="display:none;">
+        <span class="lemoji">🖼️</span>
+        <span id="lightboxFallbackText"></span>
+      </div>
     </div>
     <div class="lightbox-caption" id="lightboxCaption"></div>
+    <div class="lightbox-dots" id="lightboxDots"></div>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box" id="modalBox">
     <button class="modal-close" id="modalClose">✕</button>
-    <div id="modalContent"></div>
+    <div class="modal-inner" id="modalInner">
+      <div id="modalContent"></div>
+    </div>
   </div>
 </div>
 
@@ -557,11 +621,11 @@ const I18N = {
       list: [
         { tag:"File management · AI", title:"AI-система архівування та управління файлами", problem:"Ручний пошук і каталогізація документів займає багато часу", solution:"Node.js/Express + n8n (5 webhook-воркфлоу), Pinecone semantic search, Google Drive, Notion як шар метаданих", result:"Миттєвий семантичний пошук, автоматична каталогізація", featured:true,
           extra:{ hasInfo:true, description:"Повнофункціональна система для автоматичного архівування файлів: документи завантажуються, обробляються AI-моделлю, індексуються у векторній базі для семантичного пошуку, а метадані структуровано зберігаються в Notion. Система розгорнута на Railway з адмін-панеллю для керування API-ключами.", screenshots:[
-            {file:"screenshots/file-archiver-1.png", label:"Скріншот 1"},
-            {file:"screenshots/file-archiver-2.png", label:"Скріншот 2"},
-            {file:"screenshots/file-archiver-3.png", label:"Скріншот 3"},
-            {file:"screenshots/file-archiver-4.png", label:"Скріншот 4"},
-            {file:"screenshots/file-archiver-5.png", label:"Скріншот 5"}
+            {file:"screenshots/file-archiver-1.webp", label:"Скріншот 1"},
+            {file:"screenshots/file-archiver-2.webp", label:"Скріншот 2"},
+            {file:"screenshots/file-archiver-3.webp", label:"Скріншот 3"},
+            {file:"screenshots/file-archiver-4.webp", label:"Скріншот 4"},
+            {file:"screenshots/file-archiver-5.webp", label:"Скріншот 5"}
           ], docUrl:"https://drive.google.com/drive/folders/1PtvF9MHM-xZnUC6c1LjznoS8pxIg3DpY?usp=sharing" } },
         { tag:"News automation · Telegram", title:"Автоматизований новинний Telegram-канал", problem:"Ручний пошук і публікація IT-новин забирає багато часу, а прямий копіпаст із сайтів дає нечитабельний, засмічений текст", solution:"Мережа n8n-воркфлоу скрапить новинні сайти, чистить текст і публікує готові пости в Telegram з модерацією через Google Sheets", result:"Стабільний потік готових до читання новин без ручної обробки кожного посту",
           extra:{ hasInfo:true, description:"Система працює на кількох n8n-воркфлоу, кожен відповідає за свій етап конвеєра - від пошуку новини до фінальної публікації, з людською модерацією посередині для контролю якості контенту.", steps:[
@@ -571,17 +635,19 @@ const I18N = {
             {title:"AI-обробка", text:"Окремий воркфлоу періодично перевіряє таблицю; для схвалених новин AI переписує текст, виділяючи головне, і форматує під MarkdownV2"},
             {title:"Автопублікація в Telegram", text:"Готовий пост разом із зображенням зі статті автоматично публікується в каналі"}
           ], channelUrl:"https://t.me/tech_digest_ua" } },
-        { tag:"Scheduling · automation", title:"Автоматична генерація графіків роботи", problem:"Ручне складання розкладу з урахуванням побажань кожної людини - довго і схильно до помилок", solution:"Система враховує умови й побажання співробітників та формує оптимальний графік", result:"Менше часу на планування, менше конфліктів",
-          extra:{ hasInfo:false } },
-        { tag:"Finance · Notion", title:"Фінансовий асистент в Notion", problem:"Ручна категоризація витрат", solution:"n8n + AI, автоматична категоризація транзакцій (PLN)", result:"Економія часу, наочна структура",
-          extra:{ hasInfo:false } },
-        { tag:"Web · Landing page", title:"Весільний сайт з RSVP", problem:"Збір відповідей гостей вручну", solution:"Cloudflare Pages + n8n webhook + Telegram", result:"Повний цикл: фронтенд + бекенд",
-          extra:{ hasInfo:false } }
+        { tag:"Web · Landing page", title:"Весільний сайт з RSVP", problem:"Готові конструктори дають шаблонний вигляд, а ручний збір відповідей гостей незручний і губиться в переписках", solution:"Односторінковий сайт-запрошення з індивідуальним дизайном під пару, формою RSVP та автоматичною доставкою відповідей організаторам у Telegram", result:"Готовий до використання сайт без бекенду, гості підтверджують участь за хвилину",
+          extra:{ hasInfo:true, description:"Сайт створено під конкретне весілля - дизайн, фотографії та тексти індивідуальні, не шаблонні. RSVP-форма зібрана вручну під побажання пари, а відповіді гостей автоматично долітають організаторам у Telegram без необхідності перевіряти пошту чи таблиці.", steps:[
+            {icon:"design", title:"Аналіз референсу та дизайн", text:"Опрацював референсний сайт пари, витягнув стиль - кремово-чорна палітра, вишукана типографіка, парні фото наречених"},
+            {icon:"layout", title:"Верстка та контент", text:"Односторінковий сайт з вбудованими фото і шрифтами, розклад дня з іконками, інтерактивна карта локації"},
+            {icon:"form", title:"RSVP-форма", text:"Форма підтвердження участі з лічильником гостей, умовним блоком для дітей, перемикачем нічлігу та полем коментаря"},
+            {icon:"webhook", title:"Інтеграція з n8n", text:"Дані форми надсилаються на n8n-webhook, який форматує повідомлення і надсилає організаторам у Telegram"},
+            {icon:"deploy", title:"Деплой на Cloudflare Pages", text:"Статичний сайт розгорнутий через GitHub без бекенду - швидко, надійно і безкоштовно"}
+          ], demoUrl:"#" } }
       ]
     },
     diploma: { eyebrow:"05 - Кваліфікація", title:"Дипломна робота", text:"Офіційна кваліфікаційна робота з розробки AI-системи архівування файлів.", cta:"Завантажити PDF" },
     contact: { eyebrow:"06 - Зв'язок", title:"Контакти", viewProfile:"Профіль" },
-    modal: { learnMore:"Дізнатись більше", screenshotsTitle:"Скріншоти інтерфейсу", docTitle:"Документація", docCta:"Відкрити PDF у Google Docs", stepsTitle:"Як це працює", channelCta:"Переглянути Telegram-канал", emptyTitle:"Інформація уточнюється", emptyText:"Детальний опис цього кейсу поки не додано - скоро тут з'явиться більше деталей." },
+    modal: { learnMore:"Дізнатись більше", screenshotsTitle:"Скріншоти інтерфейсу", docTitle:"Документація", docCta:"Відкрити PDF у Google Docs", stepsTitle:"Як це працює", channelCta:"Переглянути Telegram-канал", demoCta:"Переглянути сайт", demoBadge:"DEMO", emptyTitle:"Інформація уточнюється", emptyText:"Детальний опис цього кейсу поки не додано - скоро тут з'явиться більше деталей." },
     footer: { text: "© 2026 Oleksandr Kalita" }
   },
   en: {
@@ -636,11 +702,11 @@ const I18N = {
       list: [
         { tag:"File management · AI", title:"AI-powered file archiving system", problem:"Manual document search and cataloging takes a lot of time", solution:"Node.js/Express + n8n (5 webhook workflows), Pinecone semantic search, Google Drive, Notion metadata layer", result:"Instant semantic search, automatic cataloging", featured:true,
           extra:{ hasInfo:true, description:"A full system for automatic file archiving: documents are uploaded, processed by an AI model, indexed in a vector database for semantic search, with metadata structured in Notion. Deployed on Railway with an admin panel for API key management.", screenshots:[
-            {file:"screenshots/file-archiver-1.png", label:"Screenshot 1"},
-            {file:"screenshots/file-archiver-2.png", label:"Screenshot 2"},
-            {file:"screenshots/file-archiver-3.png", label:"Screenshot 3"},
-            {file:"screenshots/file-archiver-4.png", label:"Screenshot 4"},
-            {file:"screenshots/file-archiver-5.png", label:"Screenshot 5"}
+            {file:"screenshots/file-archiver-1.webp", label:"Screenshot 1"},
+            {file:"screenshots/file-archiver-2.webp", label:"Screenshot 2"},
+            {file:"screenshots/file-archiver-3.webp", label:"Screenshot 3"},
+            {file:"screenshots/file-archiver-4.webp", label:"Screenshot 4"},
+            {file:"screenshots/file-archiver-5.webp", label:"Screenshot 5"}
           ], docUrl:"https://drive.google.com/drive/folders/1PtvF9MHM-xZnUC6c1LjznoS8pxIg3DpY?usp=sharing" } },
         { tag:"News automation · Telegram", title:"Automated Telegram news channel", problem:"Manually finding and posting IT news takes a lot of time, and copy-pasting from sites gives messy, unreadable text", solution:"A network of n8n workflows scrapes news sites, cleans the text, and publishes ready posts to Telegram with human moderation via Google Sheets", result:"A steady stream of ready-to-read news without manually processing every post",
           extra:{ hasInfo:true, description:"The system runs on several n8n workflows, each handling its own stage of the pipeline - from finding a news item to final publication, with human moderation in the middle to control content quality.", steps:[
@@ -650,17 +716,19 @@ const I18N = {
             {title:"AI processing", text:"A separate workflow periodically checks the sheet; for approved items, AI rewrites the text highlighting the key points and formats it for MarkdownV2"},
             {title:"Auto-publish to Telegram", text:"The finished post, along with the article's image, is automatically published to the channel"}
           ], channelUrl:"https://t.me/tech_digest_ua" } },
-        { tag:"Scheduling · automation", title:"Automated work schedule generation", problem:"Manually building schedules accounting for preferences is slow and error-prone", solution:"A system factoring in staff conditions to auto-generate an optimal schedule", result:"Less planning time, fewer conflicts",
-          extra:{ hasInfo:false } },
-        { tag:"Finance · Notion", title:"Financial assistant in Notion", problem:"Manual expense categorization", solution:"n8n + AI, automatic transaction categorization (PLN)", result:"Time saved, clear structure",
-          extra:{ hasInfo:false } },
-        { tag:"Web · Landing page", title:"Wedding website with RSVP", problem:"Manually collecting guest responses", solution:"Cloudflare Pages + n8n webhook + Telegram", result:"Full cycle: frontend + backend automation",
-          extra:{ hasInfo:false } }
+        { tag:"Web · Landing page", title:"Wedding website with RSVP", problem:"Off-the-shelf builders look templated, and manually collecting guest responses gets lost in chats", solution:"A single-page invitation site with a custom design for the couple, an RSVP form, and automatic delivery of responses to the organizers on Telegram", result:"A ready-to-use site with no backend, guests confirm attendance in under a minute",
+          extra:{ hasInfo:true, description:"Built for a specific wedding - the design, photos and copy are custom, not templated. The RSVP form was built by hand around the couple's requirements, and guest responses land automatically in the organizers' Telegram without checking email or spreadsheets.", steps:[
+            {icon:"design", title:"Reference analysis & design", text:"Studied the couple's reference site and extracted the style - a cream-and-black palette, elegant typography, paired photos"},
+            {icon:"layout", title:"Layout & content", text:"A single-page site with embedded photos and fonts, a day schedule with icons, an interactive location map"},
+            {icon:"form", title:"RSVP form", text:"An attendance form with a guest-count stepper, a conditional children section, an overnight-stay toggle and a comments field"},
+            {icon:"webhook", title:"n8n integration", text:"Form data is sent to an n8n webhook, which formats a message and sends it to the organizers on Telegram"},
+            {icon:"deploy", title:"Deployed on Cloudflare Pages", text:"A static site deployed via GitHub with no backend - fast, reliable and free"}
+          ], demoUrl:"#" } }
       ]
     },
     diploma: { eyebrow:"05 - Qualification", title:"Bachelor's thesis", text:"An official thesis on building an AI-powered file archiving system.", cta:"Download PDF" },
     contact: { eyebrow:"06 - Contact", title:"Contact", viewProfile:"View profile" },
-    modal: { learnMore:"Learn more", screenshotsTitle:"Interface screenshots", docTitle:"Documentation", docCta:"Open PDF in Google Docs", stepsTitle:"How it works", channelCta:"View Telegram channel", emptyTitle:"Details coming soon", emptyText:"A full write-up for this case hasn't been added yet - more details will appear here soon." },
+    modal: { learnMore:"Learn more", screenshotsTitle:"Interface screenshots", docTitle:"Documentation", docCta:"Open PDF in Google Docs", stepsTitle:"How it works", channelCta:"View Telegram channel", demoCta:"View site", demoBadge:"DEMO", emptyTitle:"Details coming soon", emptyText:"A full write-up for this case hasn't been added yet - more details will appear here soon." },
     footer: { text: "© 2026 Oleksandr Kalita" }
   },
   pl: {
@@ -715,11 +783,11 @@ const I18N = {
       list: [
         { tag:"File management · AI", title:"System archiwizacji plików AI", problem:"Ręczne wyszukiwanie i katalogowanie dokumentów zajmuje dużo czasu", solution:"Node.js/Express + n8n, Pinecone, Google Drive, Notion", result:"Natychmiastowe wyszukiwanie, automatyczne katalogowanie", featured:true,
           extra:{ hasInfo:true, description:"Kompletny system automatycznej archiwizacji plików: dokumenty są przesyłane, przetwarzane przez model AI, indeksowane w bazie wektorowej do wyszukiwania semantycznego, a metadane są ustrukturyzowane w Notion. Wdrożony na Railway z panelem administracyjnym do zarządzania kluczami API.", screenshots:[
-            {file:"screenshots/file-archiver-1.png", label:"Zrzut 1"},
-            {file:"screenshots/file-archiver-2.png", label:"Zrzut 2"},
-            {file:"screenshots/file-archiver-3.png", label:"Zrzut 3"},
-            {file:"screenshots/file-archiver-4.png", label:"Zrzut 4"},
-            {file:"screenshots/file-archiver-5.png", label:"Zrzut 5"}
+            {file:"screenshots/file-archiver-1.webp", label:"Zrzut 1"},
+            {file:"screenshots/file-archiver-2.webp", label:"Zrzut 2"},
+            {file:"screenshots/file-archiver-3.webp", label:"Zrzut 3"},
+            {file:"screenshots/file-archiver-4.webp", label:"Zrzut 4"},
+            {file:"screenshots/file-archiver-5.webp", label:"Zrzut 5"}
           ], docUrl:"https://drive.google.com/drive/folders/1PtvF9MHM-xZnUC6c1LjznoS8pxIg3DpY?usp=sharing" } },
         { tag:"News automation · Telegram", title:"Zautomatyzowany kanał newsowy na Telegramie", problem:"Ręczne wyszukiwanie i publikowanie newsów IT zajmuje dużo czasu, a kopiowanie ze stron daje nieczytelny, zaśmiecony tekst", solution:"Sieć workflow n8n scrapuje strony z newsami, czyści tekst i publikuje gotowe posty na Telegramie z moderacją przez Google Sheets", result:"Stały strumień gotowych do czytania newsów bez ręcznego przetwarzania każdego posta",
           extra:{ hasInfo:true, description:"System działa na kilku workflow n8n, z których każdy odpowiada za swój etap procesu - od znalezienia newsa po ostateczną publikację, z ludzką moderacją pośrodku dla kontroli jakości treści.", steps:[
@@ -729,17 +797,19 @@ const I18N = {
             {title:"Przetwarzanie AI", text:"Osobny workflow okresowo sprawdza arkusz; dla zatwierdzonych newsów AI przepisuje tekst, wyróżniając najważniejsze punkty, i formatuje go pod MarkdownV2"},
             {title:"Automatyczna publikacja na Telegramie", text:"Gotowy post wraz ze zdjęciem z artykułu jest automatycznie publikowany na kanale"}
           ], channelUrl:"https://t.me/tech_digest_ua" } },
-        { tag:"Scheduling", title:"Automatyczne generowanie grafików", problem:"Ręczne układanie grafiku jest wolne i podatne na błędy", solution:"System uwzględniający preferencje pracowników", result:"Mniej czasu na planowanie",
-          extra:{ hasInfo:false } },
-        { tag:"Finance · Notion", title:"Asystent finansowy w Notion", problem:"Ręczna kategoryzacja wydatków", solution:"n8n + AI, automatyczna kategoryzacja (PLN)", result:"Oszczędność czasu",
-          extra:{ hasInfo:false } },
-        { tag:"Web", title:"Strona ślubna z RSVP", problem:"Ręczne zbieranie odpowiedzi gości", solution:"Cloudflare Pages + n8n + Telegram", result:"Pełny cykl frontend + backend",
-          extra:{ hasInfo:false } }
+        { tag:"Web", title:"Strona ślubna z RSVP", problem:"Gotowe kreatory dają szablonowy wygląd, a ręczne zbieranie odpowiedzi gości gubi się w wiadomościach", solution:"Jednostronicowa strona z indywidualnym designem dla pary, formularzem RSVP i automatycznym dostarczaniem odpowiedzi organizatorom na Telegramie", result:"Gotowa strona bez backendu, goście potwierdzają udział w minutę",
+          extra:{ hasInfo:true, description:"Strona stworzona pod konkretny ślub - design, zdjęcia i teksty są indywidualne, nie szablonowe. Formularz RSVP zbudowany ręcznie pod potrzeby pary, a odpowiedzi gości automatycznie trafiają do organizatorów na Telegramie bez sprawdzania maila czy arkuszy.", steps:[
+            {icon:"design", title:"Analiza referencji i design", text:"Przeanalizowałem stronę referencyjną pary i wyciągnąłem styl - kremowo-czarna paleta, elegancka typografia, zdjęcia pary"},
+            {icon:"layout", title:"Layout i treść", text:"Jednostronicowa strona z osadzonymi zdjęciami i czcionkami, harmonogram dnia z ikonami, interaktywna mapa lokalizacji"},
+            {icon:"form", title:"Formularz RSVP", text:"Formularz potwierdzenia udziału z licznikiem gości, warunkową sekcją dla dzieci, przełącznikiem noclegu i polem na komentarz"},
+            {icon:"webhook", title:"Integracja z n8n", text:"Dane z formularza trafiają do webhooka n8n, który formatuje wiadomość i wysyła ją organizatorom na Telegramie"},
+            {icon:"deploy", title:"Wdrożenie na Cloudflare Pages", text:"Statyczna strona wdrożona przez GitHub bez backendu - szybko, niezawodnie i za darmo"}
+          ], demoUrl:"#" } }
       ]
     },
     diploma: { eyebrow:"05 - Kwalifikacje", title:"Praca dyplomowa", text:"Oficjalna praca dotycząca systemu archiwizacji plików AI.", cta:"Pobierz PDF" },
     contact: { eyebrow:"06 - Kontakt", title:"Kontakt", viewProfile:"Zobacz profil" },
-    modal: { learnMore:"Dowiedz się więcej", screenshotsTitle:"Zrzuty ekranu interfejsu", docTitle:"Dokumentacja", docCta:"Otwórz PDF w Google Docs", stepsTitle:"Jak to działa", channelCta:"Zobacz kanał Telegram", emptyTitle:"Szczegóły wkrótce", emptyText:"Pełny opis tego case study nie został jeszcze dodany - wkrótce pojawi się tu więcej informacji." },
+    modal: { learnMore:"Dowiedz się więcej", screenshotsTitle:"Zrzuty ekranu interfejsu", docTitle:"Dokumentacja", docCta:"Otwórz PDF w Google Docs", stepsTitle:"Jak to działa", channelCta:"Zobacz kanał Telegram", demoCta:"Zobacz stronę", demoBadge:"DEMO", emptyTitle:"Szczegóły wkrótce", emptyText:"Pełny opis tego case study nie został jeszcze dodany - wkrótce pojawi się tu więcej informacji." },
     footer: { text: "© 2026 Oleksandr Kalita" }
   }
 };
@@ -827,7 +897,7 @@ function observeReveals() {
 }
 
 const modalOverlay = document.getElementById('modalOverlay');
-const modalBox = document.getElementById('modalBox');
+const modalBox = document.getElementById('modalInner');
 const modalContent = document.getElementById('modalContent');
 const modalClose = document.getElementById('modalClose');
 let modalIO;
@@ -878,14 +948,18 @@ function openModal(index) {
         filter: '<path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3Z"/>',
         sheet: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/><path d="M6 14h.01M6 17h.01"/>',
         ai: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/>',
-        send: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>'
+        send: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>',
+        design: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/>',
+        layout: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
+        form: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6M9 8h1"/>',
+        webhook: '<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+        deploy: '<path d="M4 15a5 5 0 0 1 3-9.5A6 6 0 0 1 18.5 8H19a4 4 0 0 1 1 7.87"/><path d="M12 12v9M9 17l3-3 3 3"/>'
       };
-      const iconKeys = ['scan','filter','sheet','ai','send'];
       html += `<div class="modal-section"><div class="mlabel modal-anim" style="animation-delay:${step(50)}ms">${m.stepsTitle}</div>
         <div class="modal-steps">${extra.steps.map((s, i) => {
           const isLast = i === extra.steps.length - 1;
           const useOrange = i % 2 === 1;
-          const iconSvg = stepIcons[iconKeys[i] || 'scan'];
+          const iconSvg = stepIcons[s.icon] || stepIcons.scan;
           const rowDelay = step(90);
           return `<div class="modal-step modal-anim" style="animation-delay:${rowDelay}ms">
             <div class="modal-step-icon-col">
@@ -920,13 +994,22 @@ function openModal(index) {
         </a>
       </div>`;
     }
+    if (extra.demoUrl) {
+      html += `<div class="modal-section modal-anim" style="animation-delay:${step(80)}ms">
+        <a href="${extra.demoUrl}" target="_blank" rel="noopener" class="modal-doc-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10Z"/></svg>
+          ${m.demoCta}
+          <span class="modal-demo-badge">${m.demoBadge}</span>
+        </a>
+      </div>`;
+    }
   } else {
     html += `<div class="modal-empty modal-anim" style="animation-delay:${step(80)}ms"><span class="memoji">🛠️</span>${m.emptyTitle}<br>${m.emptyText}</div>`;
   }
 
   modalContent.innerHTML = html;
   modalOverlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockBodyScroll();
 
   currentShots = (extra.screenshots || []);
   modalContent.querySelectorAll('.modal-shot').forEach(el => {
@@ -938,7 +1021,25 @@ function openModal(index) {
 
 function closeModal() {
   modalOverlay.classList.remove('open');
-  document.body.style.overflow = '';
+  unlockBodyScroll();
+}
+
+let lockedScrollY = 0;
+function lockBodyScroll() {
+  lockedScrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${lockedScrollY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+function unlockBodyScroll() {
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, lockedScrollY);
 }
 
 modalClose.addEventListener('click', closeModal);
@@ -947,27 +1048,47 @@ modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) c
 let currentShots = [];
 let currentShotIndex = 0;
 const lightboxOverlay = document.getElementById('lightboxOverlay');
+const lightboxStage = document.getElementById('lightboxStage');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxFallback = document.getElementById('lightboxFallback');
 const lightboxFallbackText = document.getElementById('lightboxFallbackText');
 const lightboxCaption = document.getElementById('lightboxCaption');
+const lightboxDots = document.getElementById('lightboxDots');
+const lightboxCounter = document.getElementById('lightboxCounter');
 
-function showShot(index) {
+function renderDots() {
+  lightboxDots.innerHTML = currentShots.map((_, i) =>
+    `<button class="lightbox-dot${i === currentShotIndex ? ' active' : ''}" data-idx="${i}" aria-label="${i + 1}"></button>`
+  ).join('');
+  lightboxDots.querySelectorAll('.lightbox-dot').forEach(dot => {
+    dot.addEventListener('click', () => showShot(parseInt(dot.dataset.idx, 10)));
+  });
+  lightboxCounter.textContent = `${currentShotIndex + 1} / ${currentShots.length}`;
+}
+
+function showShot(index, instant = false) {
   if (!currentShots.length) return;
-  currentShotIndex = (index + currentShots.length) % currentShots.length;
-  const shot = currentShots[currentShotIndex];
-  lightboxImg.style.display = 'none';
-  lightboxFallback.style.display = 'none';
-  lightboxCaption.textContent = shot.label;
-  lightboxFallbackText.textContent = shot.label;
-  const testImg = new Image();
-  testImg.onload = () => { lightboxImg.src = shot.file; lightboxImg.style.display = 'block'; };
-  testImg.onerror = () => { lightboxFallback.style.display = 'flex'; };
-  testImg.src = shot.file;
+  const doSwap = () => {
+    currentShotIndex = (index + currentShots.length) % currentShots.length;
+    const shot = currentShots[currentShotIndex];
+    lightboxImg.style.display = 'none';
+    lightboxFallback.style.display = 'none';
+    lightboxCaption.textContent = shot.label;
+    lightboxFallbackText.textContent = shot.label;
+    const testImg = new Image();
+    testImg.onload = () => { lightboxImg.src = shot.file; lightboxImg.style.display = 'block'; };
+    testImg.onerror = () => { lightboxFallback.style.display = 'flex'; };
+    testImg.src = shot.file;
+    renderDots();
+    lightboxStage.classList.remove('fading');
+  };
+  if (instant) { doSwap(); return; }
+  lightboxStage.classList.add('fading');
+  setTimeout(doSwap, 200);
 }
 
 function openLightbox(index) {
-  showShot(index);
+  showShot(index, true);
   lightboxOverlay.classList.add('open');
 }
 function closeLightbox() { lightboxOverlay.classList.remove('open'); }
@@ -976,6 +1097,20 @@ document.getElementById('lightboxClose').addEventListener('click', closeLightbox
 document.getElementById('lightboxPrev').addEventListener('click', () => showShot(currentShotIndex - 1));
 document.getElementById('lightboxNext').addEventListener('click', () => showShot(currentShotIndex + 1));
 lightboxOverlay.addEventListener('click', (e) => { if (e.target === lightboxOverlay) closeLightbox(); });
+
+// Swipe support for touch devices
+let touchStartX = 0, touchStartY = 0;
+lightboxOverlay.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+lightboxOverlay.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) showShot(currentShotIndex + 1); else showShot(currentShotIndex - 1);
+  }
+}, { passive: true });
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { closeLightbox(); closeModal(); }
