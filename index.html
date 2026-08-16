@@ -2,6 +2,14 @@
 <html lang="uk" data-theme="light">
 <head>
 <meta charset="UTF-8">
+<script>
+  try {
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  } catch (e) {}
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oleksandr Kalita - AI Automation Specialist</title>
 <meta name="description" content="AI Automation Specialist based in Warsaw. I build n8n workflows, integrate AI (OpenAI, Claude, Mistral) into real business processes, and develop landing pages and web solutions for clients.">
@@ -141,6 +149,18 @@
   .hero .tagline { font-size:18px; color:var(--text-secondary); max-width:540px; margin:0 auto 30px; font-weight:400; }
   .hero .loc { font-size:13.5px; color:var(--text-tertiary); margin-bottom:38px; }
   .hero-ctas { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .availability {
+    display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#1F9C5A;
+    background:#1F9C5A14; border:1px solid #1F9C5A2A; padding:8px 16px; border-radius:999px; margin-bottom:22px;
+  }
+  [data-theme="dark"] .availability { color:#34D07A; background:#34D07A1A; border-color:#34D07A2E; }
+  .availability-dot { width:8px; height:8px; border-radius:50%; background:currentColor; position:relative; }
+  .availability-dot::after {
+    content:''; position:absolute; inset:-4px; border-radius:50%; background:currentColor; opacity:.35;
+    animation: pulseDot 2s ease-out infinite;
+  }
+  @keyframes pulseDot { 0%{ transform:scale(0.6); opacity:.5; } 100%{ transform:scale(2.2); opacity:0; } }
+  @media (prefers-reduced-motion: reduce) { .availability-dot::after { animation:none; } }
   .btn { padding:14px 28px; border-radius:999px; font-size:15px; font-weight:600; cursor:pointer; transition:all .25s var(--ease); display:inline-block; border:1px solid transparent; }
   .btn-primary { background:var(--text-primary); color:var(--bg); }
   .btn-primary:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
@@ -445,8 +465,8 @@
         <button data-lang="en">EN</button>
         <button data-lang="pl">PL</button>
       </div>
-      <button class="theme-toggle" id="themeToggle">☀︎</button>
-      <button class="burger" id="burgerBtn">☰</button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme">☀︎</button>
+      <button class="burger" id="burgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
     </div>
   </div>
   <nav class="mobile-menu" id="mobileMenu">
@@ -467,6 +487,7 @@
     <div class="role" data-i18n="hero.role">AI Automation Specialist</div>
     <p class="tagline" data-i18n="hero.tagline">Автоматизую бізнес-процеси та інтегрую AI, щоб рутинні задачі виконувались без ручного втручання.</p>
     <div class="loc" data-i18n="hero.loc">Варшава, Польща · Remote</div>
+    <div class="availability"><span class="availability-dot"></span><span data-i18n="hero.availability">Відкритий до нових проєктів</span></div>
     <div class="hero-ctas">
       <a href="#cases" class="btn btn-primary" data-i18n="hero.cta1">Переглянути кейси</a>
       <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Зв'язатись</a>
@@ -543,9 +564,9 @@
 <footer><div class="wrap" data-i18n="footer.text">© 2026 Oleksandr Kalita</div></footer>
 
 <div class="lightbox-overlay" id="lightboxOverlay">
-  <button class="lightbox-close" id="lightboxClose">✕</button>
-  <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
-  <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close image viewer">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous screenshot">‹</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next screenshot">›</button>
   <div class="lightbox-frame">
     <div class="lightbox-stage" id="lightboxStage">
       <img id="lightboxImg" src="" alt="">
@@ -553,8 +574,8 @@
         <span class="lemoji">🖼️</span>
         <span id="lightboxFallbackText"></span>
       </div>
-      <div class="lightbox-tap lightbox-tap-left" id="lightboxTapLeft"></div>
-      <div class="lightbox-tap lightbox-tap-right" id="lightboxTapRight"></div>
+      <div class="lightbox-tap lightbox-tap-left" id="lightboxTapLeft" aria-hidden="true"></div>
+      <div class="lightbox-tap lightbox-tap-right" id="lightboxTapRight" aria-hidden="true"></div>
     </div>
     <div class="lightbox-caption" id="lightboxCaption"></div>
     <div class="lightbox-dots" id="lightboxDots"></div>
@@ -564,7 +585,7 @@
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box" id="modalBox">
-    <button class="modal-close" id="modalClose">✕</button>
+    <button class="modal-close" id="modalClose" aria-label="Close case details">✕</button>
     <div class="modal-inner" id="modalInner">
       <div id="modalContent"></div>
     </div>
@@ -578,7 +599,7 @@ const I18N = {
     hero: {
       eyebrow: "n8n · AI-інтеграції · автоматизація", role: "AI Automation Specialist",
       tagline: "Автоматизую бізнес-процеси та інтегрую AI, щоб рутинні задачі виконувались без ручного втручання. Розробляю лендинги та веб-рішення під потреби клієнта.",
-      loc: "Варшава, Польща · Remote", cta1: "Переглянути кейси", cta2: "Зв'язатись"
+      loc: "Варшава, Польща · Remote", availability: "Відкритий до нових проєктів", cta1: "Переглянути кейси", cta2: "Зв'язатись"
     },
     about: {
       eyebrow: "01 - Хто я", title: "Про мене",
@@ -659,7 +680,7 @@ const I18N = {
     hero: {
       eyebrow: "n8n · AI integration · automation", role: "AI Automation Specialist",
       tagline: "I automate business processes and integrate AI so routine tasks run without manual work. I also build landing pages and web solutions for client needs.",
-      loc: "Warsaw, Poland · Remote", cta1: "View case studies", cta2: "Get in touch"
+      loc: "Warsaw, Poland · Remote", availability: "Open to new projects", cta1: "View case studies", cta2: "Get in touch"
     },
     about: {
       eyebrow: "01 - About", title: "About me",
@@ -740,7 +761,7 @@ const I18N = {
     hero: {
       eyebrow: "n8n · integracje AI · automatyzacja", role: "AI Automation Specialist",
       tagline: "Automatyzuję procesy biznesowe i integruję AI. Tworzę też landing page i rozwiązania webowe pod potrzeby klienta.",
-      loc: "Warszawa, Polska · Zdalnie", cta1: "Zobacz case study", cta2: "Skontaktuj się"
+      loc: "Warszawa, Polska · Zdalnie", availability: "Otwarty na nowe projekty", cta1: "Zobacz case study", cta2: "Skontaktuj się"
     },
     about: {
       eyebrow: "01 - O mnie", title: "O mnie",
@@ -877,18 +898,22 @@ const mobileMenu = document.getElementById('mobileMenu');
 burgerBtn.addEventListener('click', () => {
   const open = mobileMenu.classList.toggle('open');
   burgerBtn.textContent = open ? '✕' : '☰';
+  burgerBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   mobileMenu.classList.remove('open');
   burgerBtn.textContent = '☰';
+  burgerBtn.setAttribute('aria-expanded', 'false');
 }));
 
 const themeToggle = document.getElementById('themeToggle');
+themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀︎' : '☾';
 themeToggle.addEventListener('click', () => {
   const html = document.documentElement;
   const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   html.setAttribute('data-theme', next);
   themeToggle.textContent = next === 'light' ? '☀︎' : '☾';
+  try { localStorage.setItem('theme', next); } catch (e) {}
 });
 
 let io;
@@ -979,7 +1004,7 @@ function openModal(index) {
     }
     if (extra.screenshots && extra.screenshots.length) {
       html += `<div class="modal-section"><div class="mlabel modal-anim" style="animation-delay:${step(50)}ms">${m.screenshotsTitle}</div>
-        <div class="modal-shots">${extra.screenshots.map((s, i) => `<div class="modal-shot modal-anim" style="animation-delay:${step(60)}ms; background-image:url('${s.file}')" data-shot-index="${i}"><span>${s.label}</span></div>`).join('')}</div>
+        <div class="modal-shots">${extra.screenshots.map((s, i) => `<div class="modal-shot modal-anim" style="animation-delay:${step(60)}ms; background-image:url('${s.file}')" data-shot-index="${i}" role="button" tabindex="0" aria-label="${s.label}"><span>${s.label}</span></div>`).join('')}</div>
       </div>`;
     }
     if (extra.docUrl) {
@@ -1018,6 +1043,9 @@ function openModal(index) {
   currentShots = (extra.screenshots || []);
   modalContent.querySelectorAll('.modal-shot').forEach(el => {
     el.addEventListener('click', () => openLightbox(parseInt(el.dataset.shotIndex, 10)));
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(parseInt(el.dataset.shotIndex, 10)); }
+    });
   });
 
   activateModalAnimations();
@@ -1083,7 +1111,7 @@ function showShot(index, instant = false) {
     lightboxCaption.textContent = shot.label;
     lightboxFallbackText.textContent = shot.label;
     const testImg = new Image();
-    testImg.onload = () => { lightboxImg.src = shot.file; lightboxImg.style.display = 'block'; };
+    testImg.onload = () => { lightboxImg.src = shot.file; lightboxImg.alt = shot.label; lightboxImg.style.display = 'block'; };
     testImg.onerror = () => { lightboxFallback.style.display = 'flex'; };
     testImg.src = shot.file;
     renderDots();
