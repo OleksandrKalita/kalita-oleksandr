@@ -1043,7 +1043,10 @@ function unlockBodyScroll() {
   document.body.style.left = '';
   document.body.style.right = '';
   document.body.style.width = '';
+  const prevBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = 'auto';
   window.scrollTo(0, lockedScrollY);
+  document.documentElement.style.scrollBehavior = prevBehavior;
 }
 
 modalClose.addEventListener('click', closeModal);
