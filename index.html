@@ -87,6 +87,7 @@
   h1,h2,h3 { font-weight: 700; letter-spacing: -0.02em; }
   .mono { font-family: 'JetBrains Mono', monospace; }
   a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; color: inherit; background: none; border: none; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
   img,svg { display:block; }
 
@@ -380,16 +381,17 @@
   .contact-card {
     padding:28px 20px; text-align:center; position:relative; overflow:hidden;
     display:flex; flex-direction:column; align-items:center; gap:12px;
-    font-family:inherit; cursor:pointer; -webkit-appearance:none; appearance:none; width:100%;
+    font-family:inherit; color:var(--text-primary); cursor:pointer; -webkit-appearance:none; appearance:none;
+    width:100%; min-width:0;
   }
   .contact-card .cicon {
     width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center;
-    transition: transform .35s var(--ease);
+    transition: transform .35s var(--ease); flex-shrink:0;
   }
   .contact-card:hover .cicon { transform: scale(1.1) rotate(-4deg); }
   .contact-card .cicon svg { width:24px; height:24px; }
   .contact-card .clabel { font-size:11px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.06em; }
-  .contact-card .cval { font-size:14.5px; font-weight:600; }
+  .contact-card .cval { font-size:14.5px; font-weight:600; color:var(--text-primary); max-width:100%; overflow-wrap:break-word; word-break:break-word; }
   .contact-card .carrow {
     position:absolute; top:16px; right:16px; font-size:13px; color:var(--text-tertiary);
     opacity:0; transform:translate(-4px,4px); transition:all .3s var(--ease);
@@ -699,7 +701,7 @@ const I18N = {
             {icon:"form", title:"RSVP-форма", text:"Форма підтвердження участі з лічильником гостей, умовним блоком для дітей, перемикачем нічлігу та полем коментаря"},
             {icon:"webhook", title:"Інтеграція з n8n", text:"Дані форми надсилаються на n8n-webhook, який форматує повідомлення і надсилає організаторам у Telegram"},
             {icon:"deploy", title:"Деплой на Cloudflare Pages", text:"Статичний сайт розгорнутий через GitHub без бекенду - швидко, надійно і безкоштовно"}
-          ], demoUrl:"#" } }
+          ], demoUrl:"https://wedding-invitation-website.pages.dev/" } }
       ]
     },
     diploma: { eyebrow:"05 - Кваліфікація", title:"Дипломна робота", text:"Офіційна кваліфікаційна робота з розробки AI-системи архівування файлів.", cta:"Завантажити PDF" },
@@ -780,7 +782,7 @@ const I18N = {
             {icon:"form", title:"RSVP form", text:"An attendance form with a guest-count stepper, a conditional children section, an overnight-stay toggle and a comments field"},
             {icon:"webhook", title:"n8n integration", text:"Form data is sent to an n8n webhook, which formats a message and sends it to the organizers on Telegram"},
             {icon:"deploy", title:"Deployed on Cloudflare Pages", text:"A static site deployed via GitHub with no backend - fast, reliable and free"}
-          ], demoUrl:"#" } }
+          ], demoUrl:"https://wedding-invitation-website.pages.dev/" } }
       ]
     },
     diploma: { eyebrow:"05 - Qualification", title:"Bachelor's thesis", text:"An official thesis on building an AI-powered file archiving system.", cta:"Download PDF" },
@@ -861,7 +863,7 @@ const I18N = {
             {icon:"form", title:"Formularz RSVP", text:"Formularz potwierdzenia udziału z licznikiem gości, warunkową sekcją dla dzieci, przełącznikiem noclegu i polem na komentarz"},
             {icon:"webhook", title:"Integracja z n8n", text:"Dane z formularza trafiają do webhooka n8n, który formatuje wiadomość i wysyła ją organizatorom na Telegramie"},
             {icon:"deploy", title:"Wdrożenie na Cloudflare Pages", text:"Statyczna strona wdrożona przez GitHub bez backendu - szybko, niezawodnie i za darmo"}
-          ], demoUrl:"#" } }
+          ], demoUrl:"https://wedding-invitation-website.pages.dev/" } }
       ]
     },
     diploma: { eyebrow:"05 - Kwalifikacje", title:"Praca dyplomowa", text:"Oficjalna praca dotycząca systemu archiwizacji plików AI.", cta:"Pobierz PDF" },
