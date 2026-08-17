@@ -281,6 +281,13 @@
     background:rgba(255,255,255,0.25); color:inherit;
   }
   @media (max-width:640px) { .modal-doc-btn { padding:13px 18px; font-size:13.5px; } }
+
+  .cv-frame { width:100%; height:58vh; border:1px solid var(--border); border-radius:14px; background:var(--bg-card-soft); }
+  .cv-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .cv-actions .modal-doc-btn { width:auto; flex:1; min-width:160px; }
+  .cv-btn-secondary { background:var(--bg-card-soft); color:var(--text-primary); border:1px solid var(--border); }
+  .cv-btn-secondary:hover { background:var(--text-primary); color:var(--bg); }
+  @media (max-width:640px) { .cv-frame { height:46vh; } .cv-actions { flex-direction:column; } }
   .modal-shot { cursor:pointer; }
   .modal-shot:hover { border-color:var(--accent-blue); }
 
@@ -369,10 +376,11 @@
   .diploma-card p { color:var(--text-secondary); font-size:14.5px; max-width:520px; }
 
   /* CONTACT */
-  .contact-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:520px; margin:0 auto; }
+  .contact-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:640px; margin:0 auto; }
   .contact-card {
     padding:28px 20px; text-align:center; position:relative; overflow:hidden;
     display:flex; flex-direction:column; align-items:center; gap:12px;
+    font-family:inherit; cursor:pointer; -webkit-appearance:none; appearance:none; width:100%;
   }
   .contact-card .cicon {
     width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center;
@@ -389,10 +397,25 @@
   .contact-card:hover .carrow { opacity:1; transform:translate(0,0); }
   .contact-card.c-email .cicon { background:#6E6E7318; color:#6E6E73; }
   .contact-card.c-tg .cicon { background:#0A6CFF18; color:#0A6CFF; }
+  .contact-card.c-cv .cicon { background:#FF8A0018; color:#FF8A00; }
   .contact-card.c-email:hover { box-shadow:0 12px 32px #6E6E7322; }
   .contact-card.c-tg:hover { box-shadow:0 12px 32px #0A6CFF22; }
+  .contact-card.c-cv:hover { box-shadow:0 12px 32px #FF8A0022; }
 
   footer { padding:36px 0; text-align:center; font-size:12.5px; color:var(--text-tertiary); }
+
+  .back-to-top {
+    position:fixed; bottom:26px; right:26px; width:46px; height:46px; border-radius:50%;
+    background:var(--bg-card); border:1px solid var(--border); color:var(--text-primary);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow-md);
+    opacity:0; transform:translateY(12px) scale(0.9); pointer-events:none;
+    transition:opacity .3s var(--ease), transform .3s var(--ease), background .25s var(--ease), color .25s var(--ease);
+    z-index:90;
+  }
+  .back-to-top.visible { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  .back-to-top:hover { background:var(--accent-blue); color:#fff; transform:translateY(-3px) scale(1.05); }
+  .back-to-top svg { width:19px; height:19px; }
+  @media (max-width:640px) { .back-to-top { bottom:18px; right:16px; width:42px; height:42px; } }
 
   @media (max-width: 1024px) and (min-width: 901px) {
     .wrap { max-width: 920px; }
@@ -557,11 +580,20 @@
         <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg></div>
         <div class="clabel">Telegram</div><div class="cval">@oleksandr_klt</div>
       </a>
+      <button type="button" id="cvCardBtn" class="card contact-card c-cv reveal">
+        <span class="carrow">↗</span>
+        <div class="cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h2"/></svg></div>
+        <div class="clabel">CV</div><div class="cval" data-i18n="contact.cvLabel">Переглянути / завантажити</div>
+      </button>
     </div>
   </div>
 </section>
 
 <footer><div class="wrap" data-i18n="footer.text">© 2026 Oleksandr Kalita</div></footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <div class="lightbox-overlay" id="lightboxOverlay">
   <button class="lightbox-close" id="lightboxClose" aria-label="Close image viewer">✕</button>
@@ -667,11 +699,11 @@ const I18N = {
             {icon:"form", title:"RSVP-форма", text:"Форма підтвердження участі з лічильником гостей, умовним блоком для дітей, перемикачем нічлігу та полем коментаря"},
             {icon:"webhook", title:"Інтеграція з n8n", text:"Дані форми надсилаються на n8n-webhook, який форматує повідомлення і надсилає організаторам у Telegram"},
             {icon:"deploy", title:"Деплой на Cloudflare Pages", text:"Статичний сайт розгорнутий через GitHub без бекенду - швидко, надійно і безкоштовно"}
-          ], demoUrl:"https://wedding-invitation-website.pages.dev/" } }
+          ], demoUrl:"#" } }
       ]
     },
     diploma: { eyebrow:"05 - Кваліфікація", title:"Дипломна робота", text:"Офіційна кваліфікаційна робота з розробки AI-системи архівування файлів.", cta:"Завантажити PDF" },
-    contact: { eyebrow:"06 - Зв'язок", title:"Контакти", viewProfile:"Профіль" },
+    contact: { eyebrow:"06 - Зв'язок", title:"Контакти", viewProfile:"Профіль", cvLabel:"Переглянути / завантажити", cvModalTitle:"Резюме", cvDownload:"Завантажити PDF", cvOpenTab:"Відкрити в новій вкладці", cvFallback:"Перегляд недоступний прямо тут - відкрий файл в новій вкладці або завантаж." },
     modal: { learnMore:"Дізнатись більше", screenshotsTitle:"Скріншоти інтерфейсу", docTitle:"Документація", docCta:"Відкрити PDF у Google Docs", stepsTitle:"Як це працює", channelCta:"Переглянути Telegram-канал", demoCta:"Переглянути сайт", demoBadge:"DEMO", emptyTitle:"Інформація уточнюється", emptyText:"Детальний опис цього кейсу поки не додано - скоро тут з'явиться більше деталей." },
     footer: { text: "© 2026 Oleksandr Kalita" }
   },
@@ -748,11 +780,11 @@ const I18N = {
             {icon:"form", title:"RSVP form", text:"An attendance form with a guest-count stepper, a conditional children section, an overnight-stay toggle and a comments field"},
             {icon:"webhook", title:"n8n integration", text:"Form data is sent to an n8n webhook, which formats a message and sends it to the organizers on Telegram"},
             {icon:"deploy", title:"Deployed on Cloudflare Pages", text:"A static site deployed via GitHub with no backend - fast, reliable and free"}
-          ], demoUrl:"https://wedding-invitation-website.pages.dev/" } }
+          ], demoUrl:"#" } }
       ]
     },
     diploma: { eyebrow:"05 - Qualification", title:"Bachelor's thesis", text:"An official thesis on building an AI-powered file archiving system.", cta:"Download PDF" },
-    contact: { eyebrow:"06 - Contact", title:"Contact", viewProfile:"View profile" },
+    contact: { eyebrow:"06 - Contact", title:"Contact", viewProfile:"View profile", cvLabel:"View / download", cvModalTitle:"Resume", cvDownload:"Download PDF", cvOpenTab:"Open in new tab", cvFallback:"Preview isn't available here - open the file in a new tab or download it." },
     modal: { learnMore:"Learn more", screenshotsTitle:"Interface screenshots", docTitle:"Documentation", docCta:"Open PDF in Google Docs", stepsTitle:"How it works", channelCta:"View Telegram channel", demoCta:"View site", demoBadge:"DEMO", emptyTitle:"Details coming soon", emptyText:"A full write-up for this case hasn't been added yet - more details will appear here soon." },
     footer: { text: "© 2026 Oleksandr Kalita" }
   },
@@ -829,11 +861,11 @@ const I18N = {
             {icon:"form", title:"Formularz RSVP", text:"Formularz potwierdzenia udziału z licznikiem gości, warunkową sekcją dla dzieci, przełącznikiem noclegu i polem na komentarz"},
             {icon:"webhook", title:"Integracja z n8n", text:"Dane z formularza trafiają do webhooka n8n, który formatuje wiadomość i wysyła ją organizatorom na Telegramie"},
             {icon:"deploy", title:"Wdrożenie na Cloudflare Pages", text:"Statyczna strona wdrożona przez GitHub bez backendu - szybko, niezawodnie i za darmo"}
-          ], demoUrl:"https://wedding-invitation-website.pages.dev/" } }
+          ], demoUrl:"#" } }
       ]
     },
     diploma: { eyebrow:"05 - Kwalifikacje", title:"Praca dyplomowa", text:"Oficjalna praca dotycząca systemu archiwizacji plików AI.", cta:"Pobierz PDF" },
-    contact: { eyebrow:"06 - Kontakt", title:"Kontakt", viewProfile:"Zobacz profil" },
+    contact: { eyebrow:"06 - Kontakt", title:"Kontakt", viewProfile:"Zobacz profil", cvLabel:"Zobacz / pobierz", cvModalTitle:"CV", cvDownload:"Pobierz PDF", cvOpenTab:"Otwórz w nowej karcie", cvFallback:"Podgląd niedostępny tutaj - otwórz plik w nowej karcie lub pobierz." },
     modal: { learnMore:"Dowiedz się więcej", screenshotsTitle:"Zrzuty ekranu interfejsu", docTitle:"Dokumentacja", docCta:"Otwórz PDF w Google Docs", stepsTitle:"Jak to działa", channelCta:"Zobacz kanał Telegram", demoCta:"Zobacz stronę", demoBadge:"DEMO", emptyTitle:"Szczegóły wkrótce", emptyText:"Pełny opis tego case study nie został jeszcze dodany - wkrótce pojawi się tu więcej informacji." },
     footer: { text: "© 2026 Oleksandr Kalita" }
   }
@@ -957,6 +989,32 @@ function activateModalAnimations() {
   }, { root: modalBox, threshold: 0.15 });
   elements.forEach(el => modalIO.observe(el));
 }
+
+function openCvModal() {
+  const m = I18N[currentLang].modal;
+  const c = I18N[currentLang].contact;
+  const cvPath = 'assets/cv.pdf';
+  const html = `
+    <div class="modal-anim" style="animation-delay:0ms"><h3>${c.cvModalTitle}</h3></div>
+    <div class="modal-section modal-anim" style="animation-delay:70ms">
+      <iframe class="cv-frame" src="${cvPath}" title="${c.cvModalTitle}"></iframe>
+      <div class="cv-actions">
+        <a href="${cvPath}" download="Oleksandr_Kalita_CV.pdf" class="modal-doc-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+          ${c.cvDownload}
+        </a>
+        <a href="${cvPath}" target="_blank" rel="noopener" class="modal-doc-btn cv-btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
+          ${c.cvOpenTab}
+        </a>
+      </div>
+    </div>`;
+  modalContent.innerHTML = html;
+  modalOverlay.classList.add('open');
+  lockBodyScroll();
+  activateModalAnimations();
+}
+document.getElementById('cvCardBtn').addEventListener('click', openCvModal);
 
 function openModal(index) {
   const d = I18N[currentLang];
@@ -1157,6 +1215,18 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') showShot(currentShotIndex - 1);
   }
 });
+
+const backToTop = document.getElementById('backToTop');
+let backToTopTicking = false;
+window.addEventListener('scroll', () => {
+  if (backToTopTicking) return;
+  backToTopTicking = true;
+  requestAnimationFrame(() => {
+    backToTop.classList.toggle('visible', window.scrollY > 500);
+    backToTopTicking = false;
+  });
+}, { passive: true });
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
 let initialLang = 'uk';
 try {
